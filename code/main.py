@@ -1,4 +1,5 @@
 import sys
+
 import pygame
 
 from settings import *
@@ -20,7 +21,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            dt = self.clock.tick() / 1000  # delta time or data time not sure
+            dt = self.clock.tick() / 1000  # delta time
             self.level.run(dt)
             pygame.display.update()
 
