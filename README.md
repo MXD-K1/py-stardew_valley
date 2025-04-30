@@ -21,8 +21,13 @@ The primary goal of this project is to:
 2. Understand game development principles.
 3. Explore Pygame for creating 2D games.
 
-## To-doo List
-1. Add 
+## To-do List
+1. Add seasons to the game.
+2. Add a visible inventory for the player.
+3. Money will be visible all time.
+4. More items will be added to the game.
+5. Enhance plants and soil logic.
+
 
 ## How to Run
 1. Clone this repository to your local machine.
@@ -43,9 +48,7 @@ The primary goal of this project is to:
 ## Problems
 1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
 *sprite groups*.
-2. When corn grows, its position change a little bit down.
-3. When raining, the rain falls down into the house.
-4. If long time was spent in the game without sleeping, the display gets weird.
+2. If long time was spent in the game without sleeping, the display gets weird.
 
 ## Resources
 - **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)

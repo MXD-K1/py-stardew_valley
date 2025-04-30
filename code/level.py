@@ -1,6 +1,5 @@
 from random import randint
 
-import pygame
 from pytmx.util_pygame import load_pygame
 
 from settings import *

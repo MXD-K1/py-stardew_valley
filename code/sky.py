@@ -22,10 +22,11 @@ class Sky:
         self.full_surf.fill(self.start_color)
         self.display_surface.blit(self.full_surf, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
+
 class Drop(Generic):
     def __init__(self, pos, surf, moving, groups, z):
         # General setup
-        super().__init__(pos, surf, groups)
+        super().__init__(pos, surf, groups, z)
         self.lifetime = randint(400, 500)
         self.start_time = pygame.time.get_ticks()
 

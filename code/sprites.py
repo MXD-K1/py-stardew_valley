@@ -3,7 +3,6 @@ from random import randint, choice
 import pygame
 
 from settings import *
-from timer import Timer
 
 
 class Generic(pygame.sprite.Sprite):

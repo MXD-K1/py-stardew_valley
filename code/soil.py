@@ -1,7 +1,5 @@
 from random import choice
 
-import pygame
-
 from settings import *
 from pytmx.util_pygame import load_pygame
 from support import *
@@ -29,6 +27,7 @@ class Plant(pygame.sprite.Sprite):
     def __init__(self, plant_type, groups, soil, check_watered):
         # noinspection PyTypeChecker
         super().__init__(groups)
+
         # Setup
         self.plant_type = plant_type
         self.frames = import_folder(f'../graphics/fruit/{plant_type}')
@@ -51,7 +50,7 @@ class Plant(pygame.sprite.Sprite):
         if self.check_watered(self.rect.center):
             self.age += self.grow_speed
 
-            if int(self.age) >= 0:
+            if int(self.age) > 0:
                 self.z = LAYERS['main']
                 self.hitbox = self.rect.copy().inflate(-26, -self.rect.height * 0.4)
 
@@ -60,8 +59,8 @@ class Plant(pygame.sprite.Sprite):
                 self.harvestable = True
 
             self.image = self.frames[int(self.age)]
-            self.image.get_rect(midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
-            print(self.y_offset)
+            self.rect = self.image.get_rect(midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
+
 
 class SoilLayer:
     def __init__(self, all_sprites, collision_sprites):
@@ -76,7 +75,7 @@ class SoilLayer:
         self.soil_surfs = import_folder_dict("../graphics/soil/")
         self.water_surfs = import_folder("../graphics/soil_water")
 
-        self.create_soil_gird()
+        self.create_soil_grid()
         self.create_hit_rects()
 
         # Sounds
@@ -87,12 +86,12 @@ class SoilLayer:
         self.plant_sound.set_volume(0.2)
 
     # Requirements
-    def create_soil_gird(self):
+    def create_soil_grid(self):
         ground = pygame.image.load("../graphics/world/ground.png")  # Not shown to the player
         h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
 
-        self.grid = [[[] for col in range(h_tiles)] for row in range(v_tiles)]
-        # surf is not important, y row, x col.
+        self.grid = [[[] for _ in range(h_tiles)] for _ in range(v_tiles)]
+        # surf is not important, y row, x col, [[[] for col in range(h_tiles)] for row in range(v_tiles)]
         # noinspection PyUnresolvedReferences
         for x, y, _ in load_pygame("../data/map.tmx").get_layer_by_name('Farmable').tiles():
             # noinspection PyTypeChecker
