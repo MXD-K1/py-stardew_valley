@@ -21,11 +21,8 @@ The primary goal of this project is to:
 2. Understand game development principles.
 3. Explore Pygame for creating 2D games.
 
-## Resources
-- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)
-- by Clear Code.
-- **GitHub Repository**: [PyDew Valley Remastered](https://github.com/clear-code-projects/PyDew-Valley) 
-- for code and resources in the game.
+## To-doo List
+1. Add 
 
 ## How to Run
 1. Clone this repository to your local machine.
@@ -49,6 +46,12 @@ The primary goal of this project is to:
 2. When corn grows, its position change a little bit down.
 3. When raining, the rain falls down into the house.
 4. If long time was spent in the game without sleeping, the display gets weird.
+
+## Resources
+- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)
+- by Clear Code.
+- **GitHub Repository**: [PyDew Valley Remastered](https://github.com/clear-code-projects/PyDew-Valley) 
+- for code and resources in the game.
 
 ## Contributing
 Contributions to this project are welcome and encouraged!
