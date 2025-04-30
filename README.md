@@ -51,9 +51,10 @@ The primary goal of this project is to:
 4. If long time was spent in the game without sleeping, the display gets weird.
 
 ## Contributing
-    Contributions to this project are welcome and encouraged!
-    Whether it's improving the code, fixing problems,  suggesting new features, or sharing ideas,
-    feel free to get involved.
+Contributions to this project are welcome and encouraged!
+Whether it's improving the code, fixing problems,  suggesting new features, or sharing ideas,
+feel free to get involved.
+    
 ---
 *To contribute:* 
 - Fork the project.
