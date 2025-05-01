@@ -29,6 +29,17 @@ The primary goal of this project is to:
 5. Enhance plants and soil logic.
 6. Add saving mechanism.
 
+## Playing guide
+- To move use arrows.
+- To sleep go to the bed and press Enter.
+- To use a tool press space key.
+- To change a tool press q.
+- To change the seed use e key.
+- To plant a seed press left ctrl.
+- To trade with the merchant press Enter.
+- To end trading press Escape key.
+- To buy or sell something press space.
+
 ## Problems
 1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
 *sprite groups*.
