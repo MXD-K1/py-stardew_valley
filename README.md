@@ -29,7 +29,7 @@ The primary goal of this project is to:
 3. Money will be visible all time.
 4. More items will be added to the game.
 5. Enhance plants and soil logic.
-6. Add sav for the time.
+6. Add saving mechanism for the time.
 
 ## Playing guide
 - To move use arrows.
