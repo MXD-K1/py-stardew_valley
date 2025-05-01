@@ -24,12 +24,12 @@ The primary goal of this project is to:
 3. Explore Pygame for creating 2D games.
 
 ## To-do List
-1. Add seasons to the game.
-2. Add a visible inventory for the player.
-3. Money will be visible all time.
-4. More items will be added to the game.
-5. Enhance plants and soil logic.
-6. Add saving mechanism for the time.
+1. [ ] Add seasons to the game.
+2. [ ] Add a visible inventory for the player.
+3. [ ] Money will be visible all time.
+4. [ ] More items will be added to the game.
+5. [ ] Enhance plants and soil logic.
+6. [ ] Add saving mechanism for the time.
 
 ## Playing guide
 - To move use arrows.
