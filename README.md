@@ -27,7 +27,12 @@ The primary goal of this project is to:
 3. Money will be visible all time.
 4. More items will be added to the game.
 5. Enhance plants and soil logic.
+6. Add saving mechanism.
 
+## Problems
+1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
+*sprite groups*.
+2. If long time was spent in the game without sleeping, the display gets weird.
 
 ## How to Run
 1. Clone this repository to your local machine.
@@ -45,15 +50,12 @@ The primary goal of this project is to:
    python main.py
    ```
    
-## Problems
-1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
-*sprite groups*.
-2. If long time was spent in the game without sleeping, the display gets weird.
+OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 
 ## Resources
 - **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)
 - by Clear Code.
-- **GitHub Repository**: [PyDew Valley Remastered](https://github.com/clear-code-projects/PyDew-Valley) 
+- **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
 
 ## Contributing
