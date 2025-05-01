@@ -88,4 +88,7 @@ Special thanks to **_Clear Code_** for providing an excellent tutorial and resou
 ## License
 This project is open-source and available under the MIT License. Feel free to use, modify, and distribute the code,
 provided proper attribution is given. For more information see the included [license](LICENSE).
+
+## Contact 
+For any questions, issues, or feedback, don't hesitate to open an issue on GitHub or email me at hmdoonwork71@gmail.com.
    
