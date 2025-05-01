@@ -11,6 +11,7 @@ from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
 from menu import Menu
+from data import export_data, import_data
 
 
 class Level:
@@ -29,6 +30,7 @@ class Level:
         self.setup()
         self.overlay = Overlay(self.player)
         self.transition = Transition(self.reset, self.player)
+        self.day_count = 0
 
         # Sky
         self.rain = Rain(self.all_sprites)
@@ -46,12 +48,15 @@ class Level:
         self.music = pygame.mixer.Sound("../audio/music.mp3")
         self.music.play(loops=-1)  # inf
 
+        # Getting data
+        self.get_user_data()
+
     # noinspection PyUnresolvedReferences,PyTypeChecker
     def setup(self):
         # the map
         tmx_data = load_pygame('../data/map.tmx')
 
-        # house
+        # House
         for layer in ['HouseFloor', 'HouseFurnitureBottom']:  # they must be in order
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
                 # noinspection PyTypeChecker
@@ -102,7 +107,7 @@ class Level:
                                      tree_sprites=self.tree_sprites,
                                      interaction=self.interaction_sprites,
                                      soil_layer=self.soil_layer,
-                                     toggle_shop= self.toggle_shop)
+                                     toggle_shop=self.toggle_shop)
 
             if obj.name == "Bed":
                 Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
@@ -115,6 +120,24 @@ class Level:
                 surf=pygame.image.load("../graphics/world/ground.png").convert_alpha(),
                 groups=self.all_sprites,
                 z=LAYERS['ground'])
+
+    def get_user_data(self):
+        data = import_data()
+        if data:
+            self.player.pos = pygame.math.Vector2(data['player']['pos'])
+            self.player.item_inventory = data['player']['inventories']['item inventory']
+            self.player.item_seed = data['player']['inventories']['seed inventory']
+            self.player.selected_tool = data['player']['selected tool']
+            self.player.selected_seed = data['player']['selected seed']
+            self.day_count = data['day count']
+            self.raining = data['raining']
+            self.soil_layer.raining = self.raining
+            self.soil_layer.grid = data['farming data']
+            self.soil_layer.create_hit_rects()
+            self.soil_layer.create_soil_tiles()
+            self.soil_layer.plant_seeds()
+            if self.raining:
+                self.soil_layer.water_all()
 
     def player_add(self, item, amount=1):
         self.player.item_inventory[item] += amount
@@ -135,6 +158,7 @@ class Level:
         self.raining = randint(0, 10) > 7
         self.soil_layer.raining = self.raining
         if self.raining:
+            self.soil_layer.remove_water()
             self.soil_layer.water_all()
 
         # Trees and apples
@@ -146,6 +170,19 @@ class Level:
         # Sky
         self.sky.start_color = [255, 255, 255]
 
+        # Days
+        self.day_count += 1
+
+        # Saving data
+        for plant, soil_tile in zip(self.soil_layer.plant_sprites.sprites(),
+                                    self.soil_layer.soil_sprites.sprites()):
+            x = soil_tile.rect.left // TILE_SIZE
+            y = soil_tile.rect.top // TILE_SIZE
+            cell = self.soil_layer.grid[y][x]
+            cell["Age"] = plant.age
+
+        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
+
     def plant_collision(self):
         if self.soil_layer.plant_sprites:
             for plant in self.soil_layer.plant_sprites.sprites():
@@ -155,7 +192,12 @@ class Level:
                     # noinspection PyTypeChecker
                     Particle(plant.rect.topleft, plant.image, self.all_sprites, z=LAYERS['main'])
 
-                    self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE].remove('P')
+                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
+                        [plant.rect.centerx // TILE_SIZE]["Planted"]) = False
+                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
+                        [plant.rect.centerx // TILE_SIZE]["Seed"]) = None
+                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
+                        [plant.rect.centerx // TILE_SIZE]["Age"]) = 0
 
     def run(self, dt):
         # Drawing logic

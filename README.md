@@ -9,11 +9,13 @@ game development concepts, Python programming, and Pygame functionalities.
 (*This version reflects the initial release of the learning project.*)
 
 ## Features
-- Farming mechanics.
-- Day and night cycle.
-- Weather effects.
-- Merchant interactions.
-- Tile-based map and sprite animations.
+- **Farming mechanics**.
+- **Day and night cycle**.
+- **Weather effects**.
+- **Merchant interactions**.
+- **Tile-based map and sprite animations**.
+- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience
+and preventing data loss. Players can resume their game from their last rest point.
 
 ## Purpose
 The primary goal of this project is to:
@@ -27,7 +29,7 @@ The primary goal of this project is to:
 3. Money will be visible all time.
 4. More items will be added to the game.
 5. Enhance plants and soil logic.
-6. Add saving mechanism.
+6. Add sav for the time.
 
 ## Playing guide
 - To move use arrows.
