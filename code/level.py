@@ -135,8 +135,9 @@ class Level:
             self.soil_layer.grid = data['farming data']
             self.soil_layer.create_hit_rects()
             self.soil_layer.create_soil_tiles()
-            self.soil_layer.plant_seeds()
+            self.soil_layer.plant_seeds()  # It also loads plant age
             if self.raining:
+                self.soil_layer.remove_water()
                 self.soil_layer.water_all()
 
     def player_add(self, item, amount=1):
@@ -174,13 +175,6 @@ class Level:
         self.day_count += 1
 
         # Saving data
-        for plant, soil_tile in zip(self.soil_layer.plant_sprites.sprites(),
-                                    self.soil_layer.soil_sprites.sprites()):
-            x = soil_tile.rect.left // TILE_SIZE
-            y = soil_tile.rect.top // TILE_SIZE
-            cell = self.soil_layer.grid[y][x]
-            cell["Age"] = plant.age
-
         export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
 
     def plant_collision(self):
