@@ -93,19 +93,20 @@ class SoilLayer:
         ground = pygame.image.load("../graphics/world/ground.png")  # Not shown to the player
         h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
 
-        self.grid = [[{'Farmable': False, "Hit": False, "Watered": False, "Planted": False, "Seed": None, "Age": 0}
+        self.grid = [[{"Soil info": {"Farmable": False, "Hit": False, "Watered": False},
+                       "Planting info": {"Planted": False, "Seed": None, "Age": 0}}
                       for _ in range(h_tiles)] for _ in range(v_tiles)]
         # surf is not important, y row, x col, [[[] for col in range(h_tiles)] for row in range(v_tiles)]
         # noinspection PyUnresolvedReferences
         for x, y, _ in load_pygame("../data/map.tmx").get_layer_by_name('Farmable').tiles():
             # noinspection PyTypeChecker
-            self.grid[y][x]['Farmable'] = True
+            self.grid[y][x]["Soil info"]["Farmable"] = True
 
     def create_hit_rects(self):
         self.hit_rects = []
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
-                if cell['Farmable']:
+                if cell['Soil info']['Farmable']:
                     x = index_col * TILE_SIZE
                     y = index_row * TILE_SIZE
                     rect = pygame.Rect((x, y), (TILE_SIZE, TILE_SIZE))
@@ -119,9 +120,10 @@ class SoilLayer:
                 x = rect.x // TILE_SIZE
                 y = rect.y // TILE_SIZE
 
-                if self.grid[y][x]["Farmable"]:
-                    self.grid[y][x]["Hit"] = True
+                if self.grid[y][x]["Soil info"]["Farmable"]:
+                    self.grid[y][x]["Soil info"]["Hit"] = True
                     self.create_soil_tiles()
+                    # noinspection PyUnresolvedReferences
                     if self.raining:
                         self.water_all()
 
@@ -131,7 +133,7 @@ class SoilLayer:
                 x = soil_sprite.rect.x // TILE_SIZE
                 y = soil_sprite.rect.y // TILE_SIZE
                 # noinspection PyTypeChecker
-                self.grid[y][x]["Watered"] = True
+                self.grid[y][x]["Soil info"]["Watered"] = True
 
                 pos = soil_sprite.rect.topleft
                 surf = choice(self.water_surfs)
@@ -141,8 +143,8 @@ class SoilLayer:
     def water_all(self):
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
-                if cell["Hit"] and not cell["Watered"]:
-                    cell["Watered"] = True
+                if cell["Soil info"]["Hit"] and not cell["Soil info"]["Watered"]:
+                    cell["Soil info"]["Watered"] = True
 
                     x = index_col * TILE_SIZE
                     y = index_row * TILE_SIZE
@@ -159,14 +161,14 @@ class SoilLayer:
         # Clean up the grid
         for row in self.grid:
             for cell in row:
-                if cell["Watered"]:
-                    cell["Watered"] = False
+                if cell["Soil info"]["Watered"]:
+                    cell["Soil info"]["Watered"] = False
 
     def check_watered(self, pos):
         x = pos[0] // TILE_SIZE
         y = pos[1] // TILE_SIZE
         cell = self.grid[y][x]
-        is_watered = cell["Watered"]
+        is_watered = cell["Soil info"]["Watered"]
         return is_watered
 
     def plant_seed(self, target_pos, seed):
@@ -177,10 +179,10 @@ class SoilLayer:
                 x = soil_sprite.rect.x // TILE_SIZE
                 y = soil_sprite.rect.y // TILE_SIZE
 
-                if not self.grid[y][x]["Planted"]:
+                if not self.grid[y][x]["Planting info"]["Planted"]:
                     # noinspection PyTypeChecker
-                    self.grid[y][x]["Planted"] = True
-                    self.grid[y][x]["Seed"] = seed
+                    self.grid[y][x]["Planting info"]["Planted"] = True
+                    self.grid[y][x]["Planting info"]["Seed"] = seed
                     # noinspection PyTypeChecker
                     Plant(seed, [self.all_sprites, self.plant_sprites, self.collision_sprites], soil_sprite,
                           self.check_watered)
@@ -193,27 +195,34 @@ class SoilLayer:
             x = soil_sprite.rect.x // TILE_SIZE
             y = soil_sprite.rect.y // TILE_SIZE
             cell = self.grid[y][x]
-            if cell["Planted"]:
+            if cell["Planting info"]["Planted"]:
                 # noinspection PyTypeChecker
-                plant = Plant(cell["Seed"], [self.all_sprites, self.plant_sprites, self.collision_sprites],
+                plant = Plant(cell["Planting info"]["Seed"],
+                              [self.all_sprites, self.plant_sprites, self.collision_sprites],
                               soil_sprite, self.check_watered)
-                plant.age = cell["Age"]
+                plant.age = cell["Planting info"]["Age"]
                 plant.display()
 
     def update_plants(self):
         for plant in self.plant_sprites.sprites():
             plant.grow()
 
+            # Save the data to the grid
+            x = plant.soil.rect.left // TILE_SIZE
+            y = plant.soil.rect.top // TILE_SIZE
+            cell = self.grid[y][x]
+            cell["Planting info"]["Age"] = plant.age
+
     def create_soil_tiles(self):
         self.soil_sprites.empty()
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
-                if cell["Hit"]:
+                if cell["Soil info"]["Hit"]:
                     # Tile options
-                    t = self.grid[index_row - 1][index_col]["Hit"]
-                    b = self.grid[index_row + 1][index_col]["Hit"]
-                    r = row[index_col + 1]["Hit"]
-                    l = row[index_col - 1]["Hit"]
+                    t = self.grid[index_row - 1][index_col]["Soil info"]["Hit"]
+                    b = self.grid[index_row + 1][index_col]["Soil info"]["Hit"]
+                    r = row[index_col + 1]["Soil info"]["Hit"]
+                    l = row[index_col - 1]["Soil info"]["Hit"]
 
                     tile_type = "o"
 

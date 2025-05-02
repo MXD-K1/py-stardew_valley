@@ -5,8 +5,14 @@ on creating a Stardew Valley-inspired game using Python and Pygame. It serves as
 game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
-**Current Version**: 1.0.0  
+**Current Version**: 1.0.1  
 (*This version reflects the initial release of the learning project.*)
+*When the game reach version 1.1.0, it will be ready*.
+
+## What's New:
+- Fixed some bugs:
+  1. Now, every time the game is opened, the tiles will be watered if it is raining.
+  2. Plants *age* is being saved correctly.
 
 ## Features
 - **Farming mechanics**.
@@ -29,7 +35,6 @@ The primary goal of this project is to:
 3. Money will be visible all time.
 4. More items will be added to the game.
 5. Enhance plants and soil logic.
-6. Add saving mechanism for the time.
 
 ## Playing guide
 - To move use arrows.
@@ -38,7 +43,7 @@ The primary goal of this project is to:
 - To change a tool press q.
 - To change the seed use e key.
 - To plant a seed press left ctrl.
-- To trade with the merchant press Enter.
+- To trade with the merchant press Enter (You must be in the trading area).
 - To end trading press Escape key.
 - To buy or sell something press space.
 
