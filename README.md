@@ -5,9 +5,15 @@ on creating a Stardew Valley-inspired game using Python and Pygame. It serves as
 game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
-**Current Version**: 1.0.0  
+**Current Version**: 1.0.1  
 (*This version reflects the initial release of the learning project.*)
+*When the game reach version 1.1.0, it will be ready for playing!*.
 
+## What's New:
+- Fixed some bugs:
+  1. Now, every time the game is opened, the tiles will be watered if it is raining.
+  2. Plants *age* is being saved correctly.
+  
 ## Features
 - **Farming mechanics**.
 - **Day and night cycle**.
