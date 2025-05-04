@@ -82,6 +82,8 @@ OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 - by Clear Code.
 - **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
+- **Asset packs**:                        - https://cupnooble.itch.io/sprout-lands-asset-pack
+   - https://cupnooble.itch.io/sprout-lands-ui-pack
 
 ## Contributing
 Contributions to this project are welcome and encouraged!
