@@ -1,5 +1,6 @@
 import pygame
 
+from support import import_img
 from settings import *
 
 
@@ -11,9 +12,9 @@ class Overlay:
 
         # imports
         overlay_path = "../graphics/overlay"
-        self.tools_surf = {tool: pygame.image.load(f"{overlay_path}/{tool}.png").convert_alpha()
+        self.tools_surf = {tool: import_img(f"{overlay_path}/{tool}.png").convert_alpha()
                            for tool in player.tools}
-        self.seeds_surf = {seed: pygame.image.load(f"{overlay_path}/{seed}.png").convert_alpha()
+        self.seeds_surf = {seed: import_img(f"{overlay_path}/{seed}.png").convert_alpha()
                            for seed in player.seeds}
 
     def display(self):

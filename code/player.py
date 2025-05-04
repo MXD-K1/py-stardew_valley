@@ -67,7 +67,7 @@ class Player(pygame.sprite.Sprite):
         self.toggle_shop = toggle_shop
 
         # Sound
-        self.watering_sound = pygame.mixer.Sound("../audio/water.mp3")
+        self.watering_sound = import_audio("../audio/water.mp3")
         self.watering_sound.set_volume(0.2)
 
     def use_tool(self):

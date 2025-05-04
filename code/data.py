@@ -1,5 +1,7 @@
 import json
 
+from support import get_resource_path
+
 
 def export_data(player, raining, day_count, grid_data):
     data = {
@@ -17,15 +19,15 @@ def export_data(player, raining, day_count, grid_data):
         'farming data': grid_data,
     }  # groups can't be stored there
 
-    with open("../playing data/data.json", 'w') as file:
+    with open(get_resource_path("../playing data/data.json"), 'w') as file:
         json.dump(data, file, indent=4)
 
 
 def import_data():
     try:
-        with open("../playing data/data.json", 'r') as file:
+        with open(get_resource_path("../playing data/data.json"), 'r') as file:
             data = json.load(file)
             return data
     except (FileNotFoundError, json.JSONDecodeError):
-        with open("../playing data/data.json", 'w') as file:
+        with open(get_resource_path("../playing data/data.json"), 'w') as file:
             json.dump({}, file, indent=4)

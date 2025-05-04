@@ -2,6 +2,7 @@ from random import randint, choice
 
 import pygame
 
+from support import import_img, import_audio
 from settings import *
 
 
@@ -81,10 +82,10 @@ class Tree(Generic):
         self.health = 5
         self.alive = True
         stump_path = f"../graphics/stumps/{name.lower()}.png"
-        self.stump_surf = pygame.image.load(stump_path).convert_alpha()  # when dead
+        self.stump_surf = import_img(stump_path).convert_alpha()  # when dead
 
         # Apples
-        self.apple_surf = pygame.image.load("../graphics/fruit/apple.png")
+        self.apple_surf = import_img("../graphics/fruit/apple.png")
         self.apple_pos = APPLE_POS[name]
         self.apple_sprites = pygame.sprite.Group()
         self.create_fruit()
@@ -92,7 +93,7 @@ class Tree(Generic):
         self.player_add = player_add
 
         # Sound
-        self.axe_sound = pygame.mixer.Sound("../audio/axe.mp3")
+        self.axe_sound = import_audio("../audio/axe.mp3")
 
     def damage(self):
         # Damage tree

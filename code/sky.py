@@ -2,7 +2,7 @@ from random import randint, choice
 
 import pygame
 
-from support import import_folder
+from support import import_folder, import_img
 from settings import *
 from sprites import Generic
 
@@ -54,7 +54,7 @@ class Rain:
         self.all_sprites = all_sprites
         self.rain_drops = import_folder("../graphics/rain/drops/")
         self.rain_floor = import_folder("../graphics/rain/floor/")
-        self.floor_w, self.floor_h = pygame.image.load("../graphics/world/ground.png").get_size()
+        self.floor_w, self.floor_h = import_img("../graphics/world/ground.png").get_size()
 
     def create_floor(self):
         Drop(

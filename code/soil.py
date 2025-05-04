@@ -75,22 +75,22 @@ class SoilLayer:
         self.plant_sprites = pygame.sprite.Group()
 
         # Graphics
-        self.soil_surfs = import_folder_dict("../graphics/soil/")
+        self.soil_surfs = import_folder_dict("../graphics/soil")
         self.water_surfs = import_folder("../graphics/soil_water")
 
         self.create_soil_grid()
         self.create_hit_rects()
 
         # Sounds
-        self.hoe_sound = pygame.mixer.Sound("../audio/hoe.wav")
+        self.hoe_sound = import_audio("../audio/hoe.wav")
         self.hoe_sound.set_volume(0.1)
 
-        self.plant_sound = pygame.mixer.Sound("../audio/plant.wav")
+        self.plant_sound = import_audio("../audio/plant.wav")
         self.plant_sound.set_volume(0.2)
 
     # Requirements
     def create_soil_grid(self):
-        ground = pygame.image.load("../graphics/world/ground.png")  # Not shown to the player
+        ground = import_img("../graphics/world/ground.png")  # Not shown to the player
         h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
 
         self.grid = [[{"Soil info": {"Farmable": False, "Hit": False, "Watered": False},
@@ -98,7 +98,7 @@ class SoilLayer:
                       for _ in range(h_tiles)] for _ in range(v_tiles)]
         # surf is not important, y row, x col, [[[] for col in range(h_tiles)] for row in range(v_tiles)]
         # noinspection PyUnresolvedReferences
-        for x, y, _ in load_pygame("../data/map.tmx").get_layer_by_name('Farmable').tiles():
+        for x, y, _ in load_pygame(get_resource_path("../data/map.tmx")).get_layer_by_name('Farmable').tiles():
             # noinspection PyTypeChecker
             self.grid[y][x]["Soil info"]["Farmable"] = True
 

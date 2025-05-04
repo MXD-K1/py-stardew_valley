@@ -5,7 +5,7 @@ on creating a Stardew Valley-inspired game using Python and Pygame. It serves as
 game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
-**Current Version**: 1.0.1  
+**Current Version**: 1.0.2  
 (*This version reflects the initial release of the learning project.*)
 *When the game reach version 1.1.0, it will be ready for playing!*.
 
@@ -13,6 +13,7 @@ game development concepts, Python programming, and Pygame functionalities.
 - Fixed some bugs:
   1. Now, every time the game is opened, the tiles will be watered if it is raining.
   2. Plants *age* is being saved correctly.
+  3. EXE and the source files are working now.
   
 ## Features
 - **Farming mechanics**.
@@ -64,7 +65,12 @@ The primary goal of this project is to:
    ```bash
    pip install pygame, pytmx
    ```
-4. Run the main script:
+4. If you are not in code file write this into the terminal:
+    ```bash
+   cd code
+   ```
+
+5. Run the main script:
    ```bash
    python main.py
    ```

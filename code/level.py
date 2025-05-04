@@ -1,12 +1,13 @@
 from random import randint
 
+import pygame
 from pytmx.util_pygame import load_pygame
 
 from settings import *
 from player import Player
 from overlay import Overlay
 from sprites import Generic, Water, WildFlower, Tree, Interaction, Particle
-from support import *
+from support import import_img, import_folder, import_audio, get_resource_path
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
@@ -43,9 +44,9 @@ class Level:
         self.shop_active = False
 
         # Sound (music)
-        self.success = pygame.mixer.Sound("../audio/success.wav")
+        self.success = import_audio("../audio/success.wav")
         self.success.set_volume(0.3)
-        self.music = pygame.mixer.Sound("../audio/music.mp3")
+        self.music = import_audio("../audio/music.mp3")
         self.music.play(loops=-1)  # inf
 
         # Getting data
@@ -54,7 +55,7 @@ class Level:
     # noinspection PyUnresolvedReferences,PyTypeChecker
     def setup(self):
         # the map
-        tmx_data = load_pygame('../data/map.tmx')
+        tmx_data = load_pygame(get_resource_path('../data/map.tmx'))
 
         # House
         for layer in ['HouseFloor', 'HouseFurnitureBottom']:  # they must be in order
@@ -117,7 +118,7 @@ class Level:
 
         # noinspection PyTypeChecker
         Generic(pos=(0, 0),
-                surf=pygame.image.load("../graphics/world/ground.png").convert_alpha(),
+                surf=import_img("../graphics/world/ground.png").convert_alpha(),
                 groups=self.all_sprites,
                 z=LAYERS['ground'])
 
