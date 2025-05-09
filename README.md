@@ -6,7 +6,6 @@ game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
 **Current Version**: 1.0.2  
-(*This version reflects the initial release of the learning project.*)
 *When the game reach version 1.1.0, it will be ready for playing!*.
 
 ## What's New:
@@ -21,8 +20,7 @@ game development concepts, Python programming, and Pygame functionalities.
 - **Weather effects**.
 - **Merchant interactions**.
 - **Tile-based map and sprite animations**.
-- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience
-and preventing data loss. Players can resume their game from their last rest point.
+- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience and preventing data loss. Players can resume their game from their last rest point.
 
 ## Purpose
 The primary goal of this project is to:
@@ -36,9 +34,9 @@ The primary goal of this project is to:
 3. [ ] Money will be visible all time.
 4. [ ] More items will be added to the game.
 5. [ ] Enhance plants and soil logic.
-6. [ ] Add saving mechanism for the time.
+6. [ ] Change saving mechanism to save at any time.
 
-## Playing guide
+## Playing Guide
 - To move use arrows.
 - To sleep go to the bed and press Enter.
 - To use a tool press space key.
@@ -78,8 +76,7 @@ The primary goal of this project is to:
 OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 
 ## Resources
-- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)
-- by Clear Code.
+- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c) by Clear Code.
 - **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
 - **Asset packs**:                         - https://cupnooble.itch.io/sprout-lands-asset-pack
@@ -87,7 +84,7 @@ OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 
 ## Contributing
 Contributions to this project are welcome and encouraged!
-Whether it's improving the code, fixing problems,  suggesting new features, or sharing ideas,
+Whether it's improving the code, fixing problems, suggesting new features, or sharing ideas,
 feel free to get involved.
     
 ---
