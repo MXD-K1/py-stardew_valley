@@ -12,10 +12,11 @@ class Sky:
         self.display_surface = pygame.display.get_surface()
         self.full_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.start_color = [255, 255, 255]  # not a tuple because it will change
-        self.end_color = (38, 101, 189)  # at last gets weird
+        self.end_color = (100, 100, 189)  # In progress
 
     def display(self, dt):
         for index, value in enumerate(self.end_color):
+            # print(self.start_color)
             if self.start_color[index] > value:
                 self.start_color[index] -= 2 * dt
 

@@ -1,7 +1,7 @@
 import pygame
 
 from settings import *
-from support import get_resource_path
+from support import get_resource_path, import_img
 from timer import Timer
 
 
@@ -127,3 +127,25 @@ class Menu:
             amount_list = list(self.player.item_inventory.values()) + list(self.player.seed_inventory.values())
             amount = amount_list[text_index]
             self.show_entry(text_surf, amount, top, self.index == text_index)
+
+
+class MoneyBar:
+    def __init__(self, money):
+        self.display_surface = pygame.display.get_surface()
+        self.base = pygame.transform.scale(import_img("../graphics/money objects/Money surface.png"), (150, 60))
+        self.font = pygame.font.Font(get_resource_path("../font/LycheeSoda.ttf"), 32)
+        self.coin_ico = import_img("../graphics/money objects/coin.png")
+        self.money = money
+        self.space = 20
+        self.padding = 10
+
+    def display(self):
+        surf = self.font.render(str(self.money), False, "Black")
+        self.display_surface.blit(self.base, (SCREEN_WIDTH - self.base.get_width() - 10, self.space))
+        self.display_surface.blit(self.coin_ico, (SCREEN_WIDTH - self.base.get_width() + 10, self.space +
+                                                  self.padding))
+        self.display_surface.blit(surf, (SCREEN_WIDTH + self.base.get_width() - self.coin_ico.get_width() - 200,
+                                         self.space + self.padding))
+
+    def update_value(self, new_value):
+        self.money = new_value

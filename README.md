@@ -13,6 +13,7 @@ game development concepts, Python programming, and Pygame functionalities.
   1. Now, every time the game is opened, the tiles will be watered if it is raining.
   2. Plants *age* is being saved correctly.
   3. EXE and the source files are working now.
+  4. Money appears all the time.
   
 ## Features
 - **Farming mechanics**.
@@ -20,7 +21,8 @@ game development concepts, Python programming, and Pygame functionalities.
 - **Weather effects**.
 - **Merchant interactions**.
 - **Tile-based map and sprite animations**.
-- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience and preventing data loss. Players can resume their game from their last rest point.
+- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience and 
+preventing data loss. Players can resume their game from their last rest point.
 
 ## Purpose
 The primary goal of this project is to:
@@ -31,10 +33,10 @@ The primary goal of this project is to:
 ## To-do List
 1. [ ] Add seasons to the game.
 2. [ ] Add a visible inventory for the player.
-3. [ ] Money will be visible all time.
+3. [x] Money will be visible all time.
 4. [ ] More items will be added to the game.
 5. [ ] Enhance plants and soil logic.
-6. [ ] Change saving mechanism to save at any time.
+6. [ ] Change saving mechanism to save at any time. (In progress)
 
 ## Playing Guide
 - To move use arrows.
@@ -50,7 +52,7 @@ The primary goal of this project is to:
 ## Problems
 1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
 *sprite groups*.
-2. If long time was spent in the game without sleeping, the display gets weird.
+2. If long time was spent in the game without sleeping, the display gets weird.  (In progress)
 
 ## How to Run
 1. Clone this repository to your local machine.
@@ -67,7 +69,6 @@ The primary goal of this project is to:
     ```bash
    cd code
    ```
-
 5. Run the main script:
    ```bash
    python main.py
@@ -76,17 +77,17 @@ The primary goal of this project is to:
 OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 
 ## Resources
-- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c) by Clear Code.
+- **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)
+by Clear Code.
 - **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
-- **Asset packs**:  
-    -                                    https://cupnooble.itch.io/sprout-lands-asset-pack
-    - https://cupnooble.itch.io/sprout-lands-ui-pack
+- **Asset packs**:
+  - https://cupnooble.itch.io/sprout-lands-asset-pack
+  - https://cupnooble.itch.io/sprout-lands-ui-pack
 
 ## Contributing
 Contributions to this project are welcome and encouraged!
-Whether it's improving the code, fixing problems, suggesting new features, or sharing ideas,
-feel free to get involved.
+Whether it's improving the code, fixing problems, suggesting new features, or sharing ideas, feel free to get involved.
     
 ---
 *To contribute:* 

@@ -4,6 +4,9 @@
 playing data
 playing data/data.json
 
+# Temprory file for editing graphics
+graphics/temp
+
 # From github
 
 # Byte-compiled / optimized / DLL files

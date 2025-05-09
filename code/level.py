@@ -11,7 +11,7 @@ from support import import_img, import_folder, import_audio, get_resource_path
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
-from menu import Menu
+from menu import Menu, MoneyBar
 from data import export_data, import_data
 
 
@@ -40,6 +40,7 @@ class Level:
         self.sky = Sky()
 
         # Shop
+        self.money_bar = MoneyBar(self.player.money)
         self.menu = Menu(self.player, self.toggle_shop)
         self.shop_active = False
 
@@ -50,7 +51,7 @@ class Level:
         self.music.play(loops=-1)  # inf
 
         # Getting data
-        self.get_user_data()
+        self.get_saved_game_data()
 
     # noinspection PyUnresolvedReferences,PyTypeChecker
     def setup(self):
@@ -122,7 +123,7 @@ class Level:
                 groups=self.all_sprites,
                 z=LAYERS['ground'])
 
-    def get_user_data(self):
+    def get_saved_game_data(self):
         data = import_data()
         if data:
             self.player.pos = pygame.math.Vector2(data['player']['pos'])
@@ -130,6 +131,7 @@ class Level:
             self.player.item_seed = data['player']['inventories']['seed inventory']
             self.player.selected_tool = data['player']['selected tool']
             self.player.selected_seed = data['player']['selected seed']
+            self.player.money = data['player']['money']
             self.day_count = data['day count']
             self.raining = data['raining']
             self.soil_layer.raining = self.raining
@@ -140,6 +142,9 @@ class Level:
             if self.raining:
                 self.soil_layer.remove_water()
                 self.soil_layer.water_all()
+
+    def save_game_data(self):
+        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
 
     def player_add(self, item, amount=1):
         self.player.item_inventory[item] += amount
@@ -176,7 +181,7 @@ class Level:
         self.day_count += 1
 
         # Saving data
-        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
+        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)  # When sleeping
 
     def plant_collision(self):
         if self.soil_layer.plant_sprites:
@@ -188,11 +193,11 @@ class Level:
                     Particle(plant.rect.topleft, plant.image, self.all_sprites, z=LAYERS['main'])
 
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Planted"]) = False
+                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Planted"]) = False
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Seed"]) = None
+                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Seed"]) = None
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Age"]) = 0
+                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Age"]) = 0
 
     def run(self, dt):
         # Drawing logic
@@ -205,6 +210,10 @@ class Level:
         else:
             self.all_sprites.update(dt)  # Call update in sprites
             self.plant_collision()
+
+            # Money
+            self.money_bar.update_value(self.player.money)
+            self.money_bar.display()
 
         # Weather
         self.overlay.display()
