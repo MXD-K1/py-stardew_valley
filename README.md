@@ -79,7 +79,8 @@ OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 - **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c) by Clear Code.
 - **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
-- **Asset packs**:                         - https://cupnooble.itch.io/sprout-lands-asset-pack
+- **Asset packs**:  
+    -                                    https://cupnooble.itch.io/sprout-lands-asset-pack
     - https://cupnooble.itch.io/sprout-lands-ui-pack
 
 ## Contributing
