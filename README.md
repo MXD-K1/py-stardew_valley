@@ -29,6 +29,7 @@ The primary goal of this project is to:
 1. Learn and practice Python programming.
 2. Understand game development principles.
 3. Explore Pygame for creating 2D games.
+4. Understand and explore Tiled for making tile-based games.
 
 ## To-do List
 1. [ ] Add seasons to the game.
