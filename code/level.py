@@ -11,7 +11,7 @@ from support import import_img, import_folder, import_audio, get_resource_path
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
-from menu import Menu, MoneyBar
+from menu import Menu, MoneyBar, SettingMenu, StatusMenu, Inventory
 from data import export_data, import_data
 
 
@@ -39,16 +39,22 @@ class Level:
         self.soil_layer.raining = self.raining
         self.sky = Sky()
 
-        # Shop
+        # Menus
         self.money_bar = MoneyBar(self.player.money)
+        self.setting_menu = SettingMenu()
+        self.status_menu = StatusMenu(self.day_count)
+
+        # Shop
         self.menu = Menu(self.player, self.toggle_shop)
         self.shop_active = False
 
         # Sound (music)
+        self.play_sound = True
         self.success = import_audio("../audio/success.wav")
         self.success.set_volume(0.3)
         self.music = import_audio("../audio/music.mp3")
-        self.music.play(loops=-1)  # inf
+
+        self.inventory = Inventory(self.player)
 
         # Getting data
         self.get_saved_game_data()
@@ -142,9 +148,13 @@ class Level:
             if self.raining:
                 self.soil_layer.remove_water()
                 self.soil_layer.water_all()
+            self.play_sound = data['settings']['sound']
+            self.setting_menu.sound_switch.play_sound = self.play_sound
+            if self.play_sound:
+                self.music.play(loops=-1)  # inf
 
     def save_game_data(self):
-        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
+        export_data(self)
 
     def player_add(self, item, amount=1):
         self.player.item_inventory[item] += amount
@@ -181,7 +191,7 @@ class Level:
         self.day_count += 1
 
         # Saving data
-        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)  # When sleeping
+        export_data(self)  # When sleeping
 
     def plant_collision(self):
         if self.soil_layer.plant_sprites:
@@ -193,11 +203,15 @@ class Level:
                     Particle(plant.rect.topleft, plant.image, self.all_sprites, z=LAYERS['main'])
 
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Planted"]) = False
+                    [plant.rect.centerx // TILE_SIZE]["Planting info"]["Planted"]) = False
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Seed"]) = None
+                    [plant.rect.centerx // TILE_SIZE]["Planting info"]["Seed"]) = None
                     (self.soil_layer.grid[plant.rect.centery // TILE_SIZE]
-                        [plant.rect.centerx // TILE_SIZE]["Planting info"]["Age"]) = 0
+                    [plant.rect.centerx // TILE_SIZE]["Planting info"]["Age"]) = 0
+
+    def get_current_settings(self):
+        self.play_sound = self.setting_menu.sound_switch.play_sound
+        self.settings = {"play sound": self.play_sound}
 
     def run(self, dt):
         # Drawing logic
@@ -211,14 +225,10 @@ class Level:
             self.all_sprites.update(dt)  # Call update in sprites
             self.plant_collision()
 
-            # Money
-            self.money_bar.update_value(self.player.money)
-            self.money_bar.display()
-
         # Weather
         self.overlay.display()
         # Weather -> Raining
-        if self.raining and not self.shop_active:
+        if self.raining and not self.shop_active and not self.setting_menu.toggled:
             self.rain.update()
 
         # Daytime
@@ -227,6 +237,31 @@ class Level:
         # Transition overlay
         if self.player.sleep:
             self.transition.play()
+
+        if not self.shop_active:
+            # Money
+            self.money_bar.update_value(self.player.money)
+            self.money_bar.display()
+
+            # Settings
+            self.get_current_settings()
+            self.setting_menu.display(self.settings)
+
+            # Sound playing in settings
+            if not self.play_sound:
+                # pygame.mixer.pause()
+                self.music.stop()
+            else:
+                # pygame.mixer.unpause()
+                self.music.play(loops=-1)
+
+            # Status Menu
+            self.status_menu.update_value(self.day_count)
+            self.status_menu.display()
+
+            # Inventory
+            self.inventory.display()
+            self.inventory.update()
 
 
 class CameraGroup(pygame.sprite.Group):

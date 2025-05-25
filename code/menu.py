@@ -28,7 +28,7 @@ class Menu:
         self.timer = Timer(200)
 
     def display_money(self):
-        money_surf = self.font.render(f'${self.player.money}', False, 'Black')
+        money_surf = self.font.render(f' {self.player.money} ', False, 'Black')
         money_rect = money_surf.get_rect(midbottom=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 20))
 
         pygame.draw.rect(self.display_surface, 'White', money_rect.copy().inflate(10, 10),
@@ -132,9 +132,10 @@ class Menu:
 class MoneyBar:
     def __init__(self, money):
         self.display_surface = pygame.display.get_surface()
-        self.base = pygame.transform.scale(import_img("../graphics/money objects/Money surface.png"), (150, 60))
+        self.base = pygame.transform.scale(import_img("../graphics/buttons and surfaces/surface.png"),
+                                           (150, 60))
         self.font = pygame.font.Font(get_resource_path("../font/LycheeSoda.ttf"), 32)
-        self.coin_ico = import_img("../graphics/money objects/coin.png")
+        self.coin_ico = import_img("../graphics/icons/coin.png")
         self.money = money
         self.space = 20
         self.padding = 10
@@ -149,3 +150,193 @@ class MoneyBar:
 
     def update_value(self, new_value):
         self.money = new_value
+
+
+class SettingMenu:
+    def __init__(self):
+        self.display_surface = pygame.display.get_surface()
+        self.base = pygame.transform.scale(import_img("../graphics/buttons and surfaces/sq_button.png"), (50, 50))
+        self.font = pygame.font.Font(get_resource_path("../font/LycheeSoda.ttf"), 32)
+        self.setting_ico = pygame.transform.scale(import_img("../graphics/icons/settings.png"), (25, 25))
+        self.setting_pad = pygame.transform.scale(import_img("../graphics/buttons and surfaces/setting pad.png"),
+                                                  (300, 400))
+        self.space = 25
+
+        self.pos = (SCREEN_WIDTH - self.setting_pad.get_width() - 100, 90)
+
+        self.toggled = False
+        self.timer = Timer(200, self.toggle)
+
+        self.items = []
+
+        self.sound_ico = import_img("../graphics/icons/sound.png")
+        self.sound_switch = Switch()
+        self.add_item(self.sound_switch)
+
+    def display(self, settings):
+        base_rect = self.base.get_rect()
+        base_rect.topleft = (SCREEN_WIDTH - self.base.get_width() - 15, self.space + 60)
+        ico_rect = self.setting_ico.get_rect()
+        ico_rect.centerx, ico_rect.centery = base_rect.centerx, base_rect.centery - 2
+        self.display_surface.blit(self.base, base_rect)
+        self.display_surface.blit(self.setting_ico, ico_rect)
+
+        if self.timer.active:
+            self.timer.update()
+        self.check_pressed(base_rect)
+
+        if self.toggled:
+            self.display_setting_menu(settings)
+
+            if self.sound_switch.timer.active:
+                self.sound_switch.timer.update()
+
+    def check_pressed(self, rect):
+        mouse_pos = pygame.mouse.get_pos()
+        left_button_pressed = pygame.mouse.get_pressed()[0]
+        if rect.collidepoint(mouse_pos) and left_button_pressed:
+            self.timer.activate()
+
+    def toggle(self):
+        self.toggled = not self.toggled
+
+    def display_setting_menu(self, settings):
+        self.display_surface.blit(self.setting_pad, self.pos)
+        self.display_surface.blit(self.sound_ico, (self.pos[0] + 20, self.pos[1] + 110))
+
+        for index, item in enumerate(self.items):
+            item.get_surf(settings['play sound'])
+            rect = pygame.Rect(self.pos[0] + self.setting_pad.get_width() - 60,
+                               self.pos[1] + 120 + (self.space * index), 50, 30)
+            item.check_pressed(rect)
+            self.display_surface.blit(item.surf, (self.pos[0] + self.setting_pad.get_width() - 60,
+                                                  self.pos[1] + 120 + (self.space * index)))
+
+    def add_item(self, item):
+        """Add a setting to settings."""
+        self.items.append(item)
+
+
+class StatusMenu:
+    def __init__(self, day):
+        self.display_surface = pygame.display.get_surface()
+        self.base = pygame.transform.scale(import_img("../graphics/buttons and surfaces/long surface.png"),
+                                           (700, 60))
+        self.font = pygame.font.Font(get_resource_path("../font/CooperBlack.ttf"), 28)
+        self.space = 20
+        self.day = day
+
+    def display(self):
+        day_surf = self.font.render(f"Day: {self.day}", False, "Black")
+        self.display_surface.blit(self.base, (self.space - 10, self.space))
+        self.display_surface.blit(day_surf, (self.space + 10, self.space + 10))
+
+    def update_value(self, new_value):
+        self.day = new_value
+
+
+class Switch:
+    def __init__(self):
+        self.switch_on_ico = pygame.transform.scale(import_img("../graphics/buttons and surfaces/switch on.png"),
+                                                    (50, 30))
+        self.switch_off_ico = pygame.transform.scale(import_img("../graphics/buttons and surfaces/switch off.png"),
+                                                     (50, 30))
+
+        self.timer = Timer(200, self.toggle)
+        self.play_sound = False
+
+    def get_surf(self, play_sound):
+        self.play_sound = play_sound
+        self.surf = self.switch_on_ico if play_sound else self.switch_off_ico
+
+    def toggle(self):
+        self.play_sound = not self.play_sound
+
+    def check_pressed(self, rect):
+        mouse_pos = pygame.mouse.get_pos()
+        left_button_pressed = pygame.mouse.get_pressed()[0]
+        if rect.collidepoint(mouse_pos) and left_button_pressed:
+            self.timer.activate()
+
+
+class Inventory:
+    def __init__(self, player):
+        self.display_surface = pygame.display.get_surface()
+        self.base = pygame.transform.scale(import_img("../graphics/buttons and surfaces/inventory.png"),
+                                           (450, 90))
+        self.font = pygame.font.Font(get_resource_path("../font/LycheeSoda.ttf"), 26)
+
+        self.selected = 1  # for counting purpose only
+        self.highlight_box_place = [SCREEN_WIDTH // 2 - self.base.get_width() // 2 + 11, SCREEN_HEIGHT - 90]
+        self.timer = Timer(250)
+
+        self.items = ['axe', 'hoe', 'water']
+        self.player = player
+
+    def display(self):
+        self.base_rect = self.base.get_rect()
+        self.base_rect.center = SCREEN_WIDTH // 2 - self.base.get_width() // 2, SCREEN_HEIGHT - 100
+        self.display_surface.blit(self.base, self.base_rect.center)
+
+        for index, item in enumerate(self.items):
+            self.display_items(item, index + 1)  # for counting purpose only
+
+    def display_items(self, item, index):
+        img = pygame.transform.scale(import_img(f"../graphics/inventory items/{item}.png"), (32, 38))
+        rect = (SCREEN_WIDTH // 2 - self.base.get_width() // 2 + INVENTORY_ITEM_PLACES[index][0],
+                SCREEN_HEIGHT - 100 + INVENTORY_ITEM_PLACES[index][1])
+        self.display_surface.blit(img, rect)
+
+        countable = {'apple'}
+        if item in countable:
+            font = self.font.render(f'{self.player.item_inventory[item]}', False, 'black')
+            self.display_surface.blit(font, (rect[0] + 30, rect[1] + 18))
+
+    def highlight(self, left, top):
+        rect = pygame.Rect(left, top, 55, 54)
+        pygame.draw.rect(self.display_surface, 'white', rect, 3, 8)
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        self.timer.update()
+
+        if not self.timer.active:
+            if keys[pygame.K_d]:
+                if self.selected >= 7:
+                    self.selected = 1
+                    self.highlight_box_place[0] = SCREEN_WIDTH // 2 - self.base.get_width() // 2 + 11
+                else:
+                    if self.selected == 3 or self.selected == 4:  # ==3 ? to start working from 4, why I have no idea
+                        self.highlight_box_place[0] += 1  # to look nice, the problem is that the distances
+                        # aren't completely equal
+                    self.highlight_box_place[0] += 62
+                    self.selected += 1
+
+                self.timer.activate()
+
+            if keys[pygame.K_a]:
+                if self.selected <= 1:
+                    self.selected = 7
+                    self.highlight_box_place[0] += (62 * (self.selected - 1) + 2)
+                else:
+                    if self.selected == 5 or self.selected == 4:  # ==3 ? to start working from 4, why I have no idea
+                        self.highlight_box_place[0] -= 1
+                    self.highlight_box_place[0] -= 62
+                    self.selected -= 1
+
+                self.timer.activate()
+
+            if keys[pygame.K_RETURN]:
+                if self.selected in (1, 2, 3):
+                    self.player.selected_tool = self.items[self.selected - 1]
+
+            self.highlight(*self.highlight_box_place)
+
+    def update(self):
+        self.input()
+
+        if self.player.item_inventory['apple'] > 0 and 'apple' not in self.items:
+            self.items.append('apple')
+
+        if self.player.item_inventory['apple'] == 0 and 'apple' in self.items:
+            self.items.remove('apple')

@@ -135,10 +135,7 @@ class SoilLayer:
                 # noinspection PyTypeChecker
                 self.grid[y][x]["Soil info"]["Watered"] = True
 
-                pos = soil_sprite.rect.topleft
-                surf = choice(self.water_surfs)
-                # noinspection PyTypeChecker
-                WaterTile(pos, surf, [self.all_sprites, self.water_sprites])
+                self.water_tile(soil_sprite)
 
     def water_all(self):
         for index_row, row in enumerate(self.grid):
@@ -152,6 +149,12 @@ class SoilLayer:
                     surf = choice(self.water_surfs)
                     # noinspection PyTypeChecker
                     WaterTile((x, y), surf, [self.all_sprites, self.water_sprites])
+
+    def water_tile(self, soil_sprite):
+        pos = soil_sprite.rect.topleft
+        surf = choice(self.water_surfs)
+        # noinspection PyTypeChecker
+        WaterTile(pos, surf, [self.all_sprites, self.water_sprites])
 
     def remove_water(self):
         # Destroy water sprites
@@ -195,6 +198,9 @@ class SoilLayer:
             x = soil_sprite.rect.x // TILE_SIZE
             y = soil_sprite.rect.y // TILE_SIZE
             cell = self.grid[y][x]
+            if cell["Soil info"]["Watered"]:
+                self.water_tile(soil_sprite)
+
             if cell["Planting info"]["Planted"]:
                 # noinspection PyTypeChecker
                 plant = Plant(cell["Planting info"]["Seed"],

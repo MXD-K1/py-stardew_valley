@@ -2,7 +2,7 @@
 
 # saved data
 playing data
-playing data/data.json
+.venv/data.json
 
 # Temprory file for editing graphics
 graphics/temp
