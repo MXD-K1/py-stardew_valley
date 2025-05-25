@@ -33,11 +33,13 @@ The primary goal of this project is to:
 
 ## To-do List
 1. [ ] Add seasons to the game.
-2. [ ] Add a visible inventory for the player.
+2. [ ] Add a visible inventory for the player. (In progress)
 3. [x] Money will be visible all time.
 4. [ ] More items will be added to the game.
 5. [ ] Enhance plants and soil logic.
 6. [ ] Change saving mechanism to save at any time. (In progress)
+7. [ ] Add settings to the game.
+8. [ ] Save the time and the state of the trees in the game.
 
 ## Playing Guide
 - To move use arrows.
