@@ -10,16 +10,9 @@ game development concepts, Python programming, and Pygame functionalities.
 
 ## What's New:
 - Fixed some bugs:
-<<<<<<< HEAD
-  1. Now, every time the game is opened, the tiles will be watered if it is raining.
-  2. Plants *age* is being saved correctly.
-  3. EXE and the source files are working now.
-  4. Money appears all the time.
-=======
   1. EXE and the source files are working now.
   2. Money appears all the time.
   3. Settings are being added
->>>>>>> 986dffa (returned the files that were deleted because of github)
   
 ## Features
 - **Farming mechanics**.
@@ -44,13 +37,9 @@ The primary goal of this project is to:
 4. [ ] More items will be added to the game.
 5. [ ] Enhance plants and soil logic.
 6. [ ] Change saving mechanism to save at any time. (In progress)
-<<<<<<< HEAD
-7. [ ] Add settings to the game.
-8. [ ] Save the time and the state of the trees in the game.
-=======
 7. [ ] Add settings to the game. (In progress)
-8. [ ] Save the time and the state of the trees in the game. 
->>>>>>> 986dffa (returned the files that were deleted because of github)
+8. [ ] Save the time and the state of the trees in the game.
+
 
 ## Playing Guide
 - To move use arrows.
@@ -62,6 +51,8 @@ The primary goal of this project is to:
 - To trade with the merchant press Enter.
 - To end trading press Escape key.
 - To buy or sell something press space.
+- To switch between items in the inventory use a and d keys.
+- To select a tool from the inventory press Enter.
 
 ## Problems
 1. For unknown reason some the _sprites_ might not appear in the screen. As a temporary solution I sorted the
