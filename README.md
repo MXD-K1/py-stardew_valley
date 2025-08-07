@@ -5,8 +5,7 @@ on creating a Stardew Valley-inspired game using Python and Pygame. It serves as
 game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
-**Current Version**: 1.0.2  
-*When the game reach version 1.1.0, it will be ready for playing!*.
+**Current Version**: 1.0.2
 
 ## What's New:
 - Fixed some bugs:
