@@ -71,7 +71,7 @@ The primary goal of this project is to:
    ```
 4. If you are not in code file write this into the terminal:
     ```bash
-   cd code
+   cd src
    ```
 5. Run the main script:
    ```bash

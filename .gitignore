@@ -5,7 +5,7 @@ playing data
 .venv/data.json
 
 # Temprory file for editing graphics
-graphics/temp
+assets/graphics/temp
 
 # From github
 
