@@ -75,7 +75,7 @@ class SoilLayer:
         self.plant_sprites = pygame.sprite.Group()
 
         # Graphics
-        self.soil_surfs = import_folder_dict("../graphics/soil")
+        self.soil_surfs = import_folder_dict("../graphics/soil/")
         self.water_surfs = import_folder("../graphics/soil_water")
 
         self.create_soil_grid()
