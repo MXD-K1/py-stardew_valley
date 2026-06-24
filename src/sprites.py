@@ -2,8 +2,8 @@ from random import randint, choice
 
 import pygame
 
-from support import import_img, import_audio
-from settings import *
+from utils.load_utils import load_image
+from settings import APPLE_POS, LAYERS
 
 
 class Generic(pygame.sprite.Sprite):
@@ -82,10 +82,10 @@ class Tree(Generic):
         self.health = 5
         self.alive = True
         stump_path = f"assets/graphics/stumps/{name.lower()}.png"
-        self.stump_surf = import_img(stump_path).convert_alpha()  # when dead
+        self.stump_surf = load_image(stump_path).convert_alpha()  # when dead
 
         # Apples
-        self.apple_surf = import_img("assets/graphics/fruit/apple.png")
+        self.apple_surf = load_image("assets/graphics/fruit/apple.png")
         self.apple_pos = APPLE_POS[name]
         self.apple_sprites = pygame.sprite.Group()
         self.create_fruit()

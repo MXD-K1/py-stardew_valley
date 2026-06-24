@@ -1,4 +1,4 @@
-from pygame.math import Vector2
+from utils.math_utils import Vector2
 
 # Screen
 SCREEN_WIDTH = 1280

@@ -1,5 +1,7 @@
-from settings import *
-from support import *
+import pygame
+
+from settings import LAYERS, PLAYER_TOOL_OFFSET
+from utils.load_utils import load_sound, load_folder_of_images
 from timer import Timer
 
 
@@ -76,8 +78,8 @@ class Player(pygame.sprite.Sprite):
 
         # Sound
         self.play_sound = True
-        self.watering_sound = import_audio("assets/audio/water.mp3")
-        self.axe_sound = import_audio("assets/audio/axe.mp3")
+        self.watering_sound = load_sound("assets/audio/water.mp3")
+        self.axe_sound = load_sound("assets/audio/axe.mp3")
         self.watering_sound.set_volume(0.2)
 
     def use_tool(self):
@@ -117,7 +119,7 @@ class Player(pygame.sprite.Sprite):
 
         for animation in self.animations.keys():
             full_path = 'assets/graphics/character/' + animation
-            self.animations[animation] = import_folder(full_path)
+            self.animations[animation] = load_folder_of_images(full_path)
 
     def animate(self, dt):
         self.frame_index += 4 * dt

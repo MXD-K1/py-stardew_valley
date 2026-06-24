@@ -1,17 +1,16 @@
 from random import randint
 
 import pygame
-from pytmx.util_pygame import load_pygame
 
 from settings import *
 from player import Player
-from overlay import Overlay
+from ui.overlay import Overlay
 from sprites import Generic, Water, WildFlower, Tree, Interaction, Particle
-from support import import_img, import_folder, import_audio, get_resource_path
+from utils.load_utils import load_image, load_sound, load_map
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
-from menu import Menu, MoneyBar, SettingMenu, StatusMenu, Inventory
+from ui.menu import Menu, MoneyBar, SettingMenu, StatusMenu
 from data import export_data, import_data
 
 
@@ -48,13 +47,13 @@ class Level:
 
         # Sound (music)
         self.play_sound = True
-        self.success = import_audio("assets/audio/success.wav")
+        self.success = load_sound("assets/audio/success.wav")
         self.success.set_volume(0.3)
 
-        self.music = import_audio("assets/audio/music.mp3")
+        self.music = load_sound("assets/audio/music.mp3")
         self.music.play(loops=-1)  # inf
 
-        self.inventory = Inventory(self.player)
+        # self.inventory = Inventory(self.player)
 
         # Getting data
         self.get_saved_game_data()
@@ -62,7 +61,7 @@ class Level:
     # noinspection PyUnresolvedReferences,PyTypeChecker
     def setup(self):
         # the map
-        tmx_data = load_pygame(get_resource_path('assets/maps/map.tmx'))
+        tmx_data = load_map('assets/maps/map.tmx')
 
         # House
         for layer in ['HouseFloor', 'HouseFurnitureBottom']:  # they must be in order
@@ -125,7 +124,7 @@ class Level:
 
         # noinspection PyTypeChecker
         Generic(pos=(0, 0),
-                surf=import_img("assets/graphics/world/ground.png").convert_alpha(),
+                surf=load_image("assets/graphics/world/ground.png").convert_alpha(),
                 groups=self.all_sprites,
                 z=LAYERS['ground'])
 
@@ -262,8 +261,8 @@ class Level:
             self.status_menu.display()
 
             # Inventory
-            self.inventory.display()
-            self.inventory.update()
+            # self.inventory.display()
+            # self.inventory.update()
 
 
 class CameraGroup(pygame.sprite.Group):

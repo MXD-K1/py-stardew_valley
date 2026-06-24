@@ -2,8 +2,8 @@ from random import randint, choice
 
 import pygame
 
-from support import import_folder, import_img
-from settings import *
+from utils.load_utils import load_image, load_folder_of_images
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS
 from sprites import Generic
 
 
@@ -53,9 +53,9 @@ class Drop(Generic):
 class Rain:
     def __init__(self, all_sprites):
         self.all_sprites = all_sprites
-        self.rain_drops = import_folder("assets/graphics/rain/drops/")
-        self.rain_floor = import_folder("assets/graphics/rain/floor/")
-        self.floor_w, self.floor_h = import_img("assets/graphics/world/ground.png").get_size()
+        self.rain_drops = load_folder_of_images("assets/graphics/rain/drops/")
+        self.rain_floor = load_folder_of_images("assets/graphics/rain/floor/")
+        self.floor_w, self.floor_h = load_image("assets/graphics/world/ground.png").get_size()
 
     def create_floor(self):
         Drop(

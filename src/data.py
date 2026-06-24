@@ -1,6 +1,7 @@
 import json
 
-from support import get_resource_path
+from utils.file_utils import write_json, read_json
+
 
 def export_data(level) -> None:
     data = {
@@ -23,16 +24,12 @@ def export_data(level) -> None:
         'farming data': level.soil_layer.grid,
     }  # groups can't be stored there
 
-    with open(get_resource_path("playing data/data.json"), 'w') as file:
-        json.dump(data, file, indent=4)
+    write_json("playing data/data.json", data)
 
 
 def import_data() -> dict:
     try:
-        with open(get_resource_path("playing data/data.json"), 'r') as file:
-            data = json.load(file)
-            return data
+        return read_json("playing data/data.json")
     except (FileNotFoundError, json.JSONDecodeError):
-        with open(get_resource_path("playing data/data.json"), 'w') as file:
-            json.dump({}, file, indent=4)
-            return {}
+        write_json("playing data/data.json", {})
+        return {}

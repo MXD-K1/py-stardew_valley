@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from settings import *
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 from level import Level
 
 

@@ -1,9 +1,8 @@
-import time
-
 import pygame
 
 from settings import *
-from support import get_resource_path, import_img
+from utils.support import get_resource_path
+from utils.load_utils import load_image
 from timer import Timer
 
 
@@ -13,7 +12,7 @@ class Menu:
         self.player = player
         self.toggle_menu = toggle_menu
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font(get_resource_path("assets/fonts/LycheeSoda.ttf"), 30)
+        self.font = pygame.font.Font(get_resource_path("../../assets/fonts/LycheeSoda.ttf"), 30)
 
         # Options
         self.width = 400
@@ -134,10 +133,10 @@ class Menu:
 class MoneyBar:
     def __init__(self, money):
         self.display_surface = pygame.display.get_surface()
-        self.base = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/surface.png"),
+        self.base = pygame.transform.scale(load_image("../../assets/graphics/buttons and surfaces/surface.png"),
                                            (150, 60))
-        self.font = pygame.font.Font(get_resource_path("assets/fonts/LycheeSoda.ttf"), 32)
-        self.coin_ico = import_img("assets/graphics/icons/coin.png")
+        self.font = pygame.font.Font(get_resource_path("../../assets/fonts/LycheeSoda.ttf"), 32)
+        self.coin_ico = load_image("../../assets/graphics/icons/coin.png")
         self.money = money
         self.space = 20
         self.padding = 10
@@ -157,10 +156,11 @@ class MoneyBar:
 class SettingMenu:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
-        self.base = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/sq_button.png"), (50, 50))
-        self.font = pygame.font.Font(get_resource_path("assets/fonts/LycheeSoda.ttf"), 32)
-        self.setting_ico = pygame.transform.scale(import_img("assets/graphics/icons/settings.png"), (25, 25))
-        self.setting_pad = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/setting pad.png"),
+        self.base = pygame.transform.scale(load_image("../../assets/graphics/buttons and surfaces/sq_button.png"), (50, 50))
+        self.font = pygame.font.Font(get_resource_path("../../assets/fonts/LycheeSoda.ttf"), 32)
+        self.setting_ico = pygame.transform.scale(load_image("../../assets/graphics/icons/settings.png"), (25, 25))
+        self.setting_pad = pygame.transform.scale(load_image(
+            "../../assets/graphics/buttons and surfaces/setting pad.png"),
                                                   (300, 400))
         self.space = 25
 
@@ -171,7 +171,7 @@ class SettingMenu:
 
         self.items = []
 
-        self.sound_ico = import_img("assets/graphics/icons/sound.png")
+        self.sound_ico = load_image("../../assets/graphics/icons/sound.png")
         self.sound_switch = Switch()
         self.add_item(self.sound_switch)
 
@@ -222,9 +222,9 @@ class SettingMenu:
 class StatusMenu:
     def __init__(self, day):
         self.display_surface = pygame.display.get_surface()
-        self.base = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/long surface.png"),
+        self.base = pygame.transform.scale(load_image("../../assets/graphics/buttons and surfaces/long surface.png"),
                                            (700, 60))
-        self.font = pygame.font.Font(get_resource_path("assets/fonts/CooperBlack.ttf"), 28)
+        self.font = pygame.font.Font(get_resource_path("../../assets/fonts/CooperBlack.ttf"), 28)
         self.space = 20
         self.day = day
 
@@ -239,10 +239,11 @@ class StatusMenu:
 
 class Switch:
     def __init__(self):
-        self.switch_on_ico = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/switch on.png"),
+        self.switch_on_ico = pygame.transform.scale(load_image(
+            "../../assets/graphics/buttons and surfaces/switch on.png"),
                                                     (50, 30))
-        self.switch_off_ico = pygame.transform.scale(import_img(
-            "assets/graphics/buttons and surfaces/switch off.png"),
+        self.switch_off_ico = pygame.transform.scale(load_image(
+            "../../assets/graphics/buttons and surfaces/switch off.png"),
                                                      (50, 30))
 
         self.timer = Timer(200, self.toggle)
@@ -265,9 +266,9 @@ class Switch:
 class Inventory:
     def __init__(self, player):
         self.display_surface = pygame.display.get_surface()
-        self.base = pygame.transform.scale(import_img("assets/graphics/buttons and surfaces/inventory.png"),
+        self.base = pygame.transform.scale(load_image("../../assets/graphics/buttons and surfaces/inventory.png"),
                                            (450, 90))
-        self.font = pygame.font.Font(get_resource_path("assets/fonts/LycheeSoda.ttf"), 26)
+        self.font = pygame.font.Font(get_resource_path("../../assets/fonts/LycheeSoda.ttf"), 26)
 
         self.selected = 1  # for counting purpose only
         self.highlight_box_place = [SCREEN_WIDTH // 2 - self.base.get_width() // 2 + 11, SCREEN_HEIGHT - 90]
@@ -284,7 +285,7 @@ class Inventory:
     @staticmethod
     def load_assets():
         names = ["axe", "hoe", "water", "apple", "wood"]
-        surfs = {name: pygame.transform.scale(import_img(f"assets/graphics/inventory items/{name}.png"),
+        surfs = {name: pygame.transform.scale(load_image(f"assets/graphics/inventory items/{name}.png"),
                                               (32, 38)) for name in names}
         return surfs
 
@@ -319,9 +320,9 @@ class Inventory:
             if inventory[item] > 99:
                 groups = (inventory[item] // 99 if inventory[item] % 99 == 0
                           else inventory[item] // 99 + 1)
-                for group in range(groups):
-                    self.inventory_items.append([item, 99 if not group + 1 == groups else
-                                                inventory[item] % 99])
+                #for group in range(groups):
+                #    self.inventory_items.append([item, 99 if not group + 1 == groups else
+                                                # inventory[item] % 99])
             else:
                 self.inventory_items.append([item, inventory[item]])
 
