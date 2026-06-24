@@ -1,3 +1,5 @@
+import time
+
 import pygame
 
 from settings import *
@@ -271,26 +273,75 @@ class Inventory:
         self.timer = Timer(250)
 
         self.items = ['axe', 'hoe', 'water']
+        self.inventory_items = [['axe', 1], ['hoe', 1], ['water', 1]]
         self.player = player
+
+        self.item_surfs = self.load_assets()
+
+        self.count_limit = 99
+
+    @staticmethod
+    def load_assets():
+        names = ["axe", "hoe", "water", "apple", "wood"]
+        surfs = {name: pygame.transform.scale(import_img(f"../graphics/inventory items/{name}.png"),
+                                              (32, 38)) for name in names}
+        return surfs
 
     def display(self):
         self.base_rect = self.base.get_rect()
         self.base_rect.center = SCREEN_WIDTH // 2 - self.base.get_width() // 2, SCREEN_HEIGHT - 100
         self.display_surface.blit(self.base, self.base_rect.center)
 
-        for index, item in enumerate(self.items):
-            self.display_items(item, index + 1)  # for counting purpose only
-
-    def display_items(self, item, index):
-        img = pygame.transform.scale(import_img(f"../graphics/inventory items/{item}.png"), (32, 38))
+    def display_item(self, item, index, amount=None):
+        img = self.item_surfs[item]
         rect = (SCREEN_WIDTH // 2 - self.base.get_width() // 2 + INVENTORY_ITEM_PLACES[index][0],
                 SCREEN_HEIGHT - 100 + INVENTORY_ITEM_PLACES[index][1])
         self.display_surface.blit(img, rect)
 
-        countable = {'apple'}
+        countable = {'apple', 'wood'}
         if item in countable:
-            font = self.font.render(f'{self.player.item_inventory[item]}', False, 'black')
-            self.display_surface.blit(font, (rect[0] + 30, rect[1] + 18))
+            if amount is None:
+                raise ValueError("No amount provided with a countable item.")
+            font = self.font.render(f'{amount}', False, 'black')
+            if amount > 19:
+                x = 20
+            elif amount > 9:
+                x = 24
+            else:
+                x = 30
+            self.display_surface.blit(font, (rect[0] + x, rect[1] + 18))
+
+    def check_existence_and_display(self, item):  # Needs refactoring
+        inventory = {**self.player.item_inventory, **self.player.tool_inventory}
+        items = (_item[0] for _item in self.inventory_items)
+        if inventory[item] > 0 and item not in items:
+            if inventory[item] > 99:
+                groups = (inventory[item] // 99 if inventory[item] % 99 == 0
+                          else inventory[item] // 99 + 1)
+                for group in range(groups):
+                    self.inventory_items.append([item, 99 if not group + 1 == groups else
+                                                inventory[item] % 99])
+            else:
+                self.inventory_items.append([item, inventory[item]])
+
+        elif inventory[item] == 0 and item in items:
+            if inventory[item] > 99:
+                groups = (inventory[item] // 99 if inventory[item] % 99 == 0
+                          else inventory[item] // 99 + 1)
+                for group in range(groups):
+                    self.inventory_items.remove([item, 99 if not group + 1 == groups else
+                                                inventory[item] % 99])
+            else:
+                self.inventory_items.remove([item, inventory[item]])
+
+        self.display_items(inventory)
+
+    def display_items(self, inventory):
+        for index, (_item, amount) in enumerate(inventory.items()):
+            try:
+                self.display_item(_item, index + 1, amount)  # + 1 for counting purpose only
+            except KeyError:
+                pass
 
     def highlight(self, left, top):
         rect = pygame.Rect(left, top, 55, 54)
@@ -332,11 +383,17 @@ class Inventory:
 
             self.highlight(*self.highlight_box_place)
 
+    def update_items(self):
+        # inventory = {value for value in self.player.item_inventory.items()} a little faster but still slow
+        for item, count in self.player.item_inventory.items():
+            if count > 0:
+                self.items.append(item)
+
     def update(self):
+        self.display()
         self.input()
 
-        if self.player.item_inventory['apple'] > 0 and 'apple' not in self.items:
-            self.items.append('apple')
+        self.update_items()  # the game slows down here
 
-        if self.player.item_inventory['apple'] == 0 and 'apple' in self.items:
-            self.items.remove('apple')
+        for item in self.items:
+            self.check_existence_and_display(item)

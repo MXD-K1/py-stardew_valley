@@ -52,7 +52,8 @@ class Level:
         self.play_sound = True
         self.success = import_audio("../audio/success.wav")
         self.success.set_volume(0.3)
-        self.music = pygame.mixer.Sound("../audio/music.mp3")
+
+        self.music = import_audio("../audio/music.mp3")
         self.music.play(loops=-1)  # inf
 
         self.inventory = Inventory(self.player)
@@ -192,14 +193,7 @@ class Level:
         self.day_count += 1
 
         # Saving data
-        for plant, soil_tile in zip(self.soil_layer.plant_sprites.sprites(),
-                                    self.soil_layer.soil_sprites.sprites()):
-            x = soil_tile.rect.left // TILE_SIZE
-            y = soil_tile.rect.top // TILE_SIZE
-            cell = self.soil_layer.grid[y][x]
-            cell["Age"] = plant.age
-
-        export_data(self.player, self.raining, self.day_count, self.soil_layer.grid)
+        export_data(self)  # When sleeping
 
     def plant_collision(self):
         if self.soil_layer.plant_sprites:

@@ -20,6 +20,7 @@ def export_data(level):
         'settings': {
             'sound': level.play_sound,
         },
+        'Trees data': None,  # Empty for now
         'farming data': level.soil_layer.grid,
     }  # groups can't be stored there
 

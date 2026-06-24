@@ -92,15 +92,9 @@ class Tree(Generic):
 
         self.player_add = player_add
 
-        # Sound
-        self.axe_sound = import_audio("../audio/axe.mp3")
-
     def damage(self):
         # Damage tree
         self.health -= 1
-
-        # Play axe sound
-        self.axe_sound.play()
 
         # Remove an apple
         if len(self.apple_sprites.sprites()) > 0:

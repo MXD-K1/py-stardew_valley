@@ -5,6 +5,8 @@ from timer import Timer
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
+        print(0)
+        print("group", group)
         super().__init__(group)
 
         self.import_assets()
@@ -45,6 +47,12 @@ class Player(pygame.sprite.Sprite):
         self.selected_seed = self.seeds[self.seed_index]
 
         # Inventory
+        self.tool_inventory = {
+            'axe': 1,
+            'hoe': 1,
+            'water': 1
+        }
+
         self.item_inventory = {
             'wood': 0,
             'apple': 0,
@@ -67,7 +75,9 @@ class Player(pygame.sprite.Sprite):
         self.toggle_shop = toggle_shop
 
         # Sound
+        self.play_sound = True
         self.watering_sound = import_audio("../audio/water.mp3")
+        self.axe_sound = import_audio("../audio/axe.mp3")
         self.watering_sound.set_volume(0.2)
 
     def use_tool(self):
@@ -77,11 +87,16 @@ class Player(pygame.sprite.Sprite):
         if self.selected_tool == 'axe':
             for tree in self.tree_sprites.sprites():
                 if tree.rect.collidepoint(self.target_pos):
+                    # Play axe sound
+                    if self.play_sound:
+                        self.axe_sound.play()
                     tree.damage()
 
         if self.selected_tool == 'water':
             self.soil_layer.water(self.target_pos)
-            self.watering_sound.play()
+
+            if self.play_sound:
+                self.watering_sound.play()
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split("_")[0]]
