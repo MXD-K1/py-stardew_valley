@@ -5,8 +5,7 @@ on creating a Stardew Valley-inspired game using Python and Pygame. It serves as
 game development concepts, Python programming, and Pygame functionalities.
 
 ## Version
-**Current Version**: 1.0.3 
-(*This version reflects the initial release of the learning project.*)
+**Current Version**: 1.0.3
 
 ## What's New:
 - Fixed some bugs:
@@ -20,8 +19,8 @@ game development concepts, Python programming, and Pygame functionalities.
 - **Weather effects**.
 - **Merchant interactions**.
 - **Tile-based map and sprite animations**.
-- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience
-and preventing data loss. Players can resume their game from their last rest point.
+- **Saving Mechanism:** progress is automatically saved when the player sleeps, ensuring a seamless experience and 
+preventing data loss. Players can resume their game from their last rest point.
 
 ## Purpose
 The primary goal of this project is to:
@@ -48,7 +47,7 @@ The primary goal of this project is to:
 - To change a tool press q.
 - To change the seed use e key.
 - To plant a seed press left ctrl.
-- To trade with the merchant press Enter (You must be in the trading area).
+- To trade with the merchant press Enter.
 - To end trading press Escape key.
 - To buy or sell something press space.
 - To switch between items in the inventory use a and d keys.
@@ -87,14 +86,12 @@ by Clear Code.
 - **GitHub Repository**: [PyDew Valley](https://github.com/clear-code-projects/PyDew-Valley) 
 - for code and resources in the game.
 - **Asset packs**:
-  - https://cupnooble.itch.io/sorry-package
   - https://cupnooble.itch.io/sprout-lands-asset-pack
   - https://cupnooble.itch.io/sprout-lands-ui-pack
 
 ## Contributing
 Contributions to this project are welcome and encouraged!
-Whether it's improving the code, fixing problems,  suggesting new features, or sharing ideas,
-feel free to get involved.
+Whether it's improving the code, fixing problems, suggesting new features, or sharing ideas, feel free to get involved.
     
 ---
 *To contribute:* 
