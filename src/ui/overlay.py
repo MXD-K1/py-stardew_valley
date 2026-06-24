@@ -1,7 +1,7 @@
 import pygame
 
 from utils.load_utils import load_image
-from settings import *
+from settings import OVERLAY_POSITIONS
 
 
 class Overlay:
@@ -11,7 +11,7 @@ class Overlay:
         self.player = player
 
         # imports
-        overlay_path = "../../assets/graphics/overlay"
+        overlay_path = "assets/graphics/overlay"
         self.tools_surf = {tool: load_image(f"{overlay_path}/{tool}.png").convert_alpha()
                            for tool in player.tools}
         self.seeds_surf = {seed: pygame.transform.scale(load_image(f"{overlay_path}/{seed} seed.png"),

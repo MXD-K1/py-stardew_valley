@@ -4,33 +4,43 @@ import pygame
 
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 from level import Level
+from utils import quit_game
 
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("Py-Stardew Valley")
+        self._setup_screen()
         self.clock = pygame.time.Clock()
         self.level = Level()
 
+    def _setup_screen(self):
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Py-Stardew Valley")
+
+    def handle_input_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.level.save_game_data()
+                quit_game()
+
     def run(self):
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.level.save_game_data()
-                    pygame.quit()
-                    sys.exit()
+            self.handle_input_events()
 
-            dt = self.clock.tick() / 1000  # delta time
+            dt = self.clock.tick() / 1000
             self.level.run(dt)
+
             pygame.display.update()
+            self.screen.fill("black")
 
 
-if __name__ == "__main__":
+def run_game():
     try:
         game = Game()
         game.run()
     except KeyboardInterrupt:
-        pygame.quit()
-        sys.exit()
+        quit_game()
+
+if __name__ == "__main__":
+    run_game()
