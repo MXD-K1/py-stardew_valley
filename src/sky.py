@@ -2,14 +2,15 @@ from random import randint, choice
 
 import pygame
 
+from managers.resource_manager import resource_manager
 from utils.load_utils import load_image, load_folder_of_images
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS
 from sprites import Generic
 
 
 class Sky:
     def __init__(self):
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = resource_manager.get_display_surf()
         self.full_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.start_color = [255, 255, 255]  # not a tuple because it will change
         self.end_color = (100, 100, 189)  # In progress

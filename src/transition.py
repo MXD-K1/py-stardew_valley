@@ -1,11 +1,12 @@
 import pygame
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT
+from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from managers.resource_manager import resource_manager
 
 
 class Transition:
     def __init__(self, reset, player):
         # Setup
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = resource_manager.get_display_surf()
         self.reset = reset
         self.player = player
 

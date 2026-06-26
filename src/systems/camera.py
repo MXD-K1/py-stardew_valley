@@ -1,12 +1,13 @@
 import pygame
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS, PLAYER_TOOL_OFFSET
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS, PLAYER_TOOL_OFFSET
+from managers.resource_manager import resource_manager
 from utils.math_utils import Vector2
 
 class Camera:
     def __init__(self, group: pygame.sprite.Group):
         super().__init__()
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = resource_manager.get_display_surf()
         self.group = group
         self.offset = Vector2()
 

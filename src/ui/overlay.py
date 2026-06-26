@@ -1,13 +1,14 @@
 import pygame
 
+from managers.resource_manager import resource_manager
 from utils.load_utils import load_image
-from settings import OVERLAY_POSITIONS
+from config import OVERLAY_POSITIONS
 
 
 class Overlay:
     def __init__(self, player):
         # General setup
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = resource_manager.get_display_surf()
         self.player = player
 
         # imports

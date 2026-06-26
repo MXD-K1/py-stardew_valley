@@ -5,6 +5,8 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 TILE_SIZE = 64
 
+LOG_FILENAME = "log.log"
+
 # Overlay positions
 OVERLAY_POSITIONS = {
     'tool': (40,  SCREEN_HEIGHT - 15),

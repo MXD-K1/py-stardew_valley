@@ -2,22 +2,24 @@ from random import randint
 
 import pygame
 
-from settings import TILE_SIZE, LAYERS
+from config import TILE_SIZE, LAYERS
+from managers.resource_manager import resource_manager
 from systems.camera import Camera
 from ui.overlay import Overlay
 from sprites import Particle
-from utils.load_utils import load_sound
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
-from ui.menu import Menu, MoneyBar, SettingMenu, StatusMenu
+from ui.menus.status_menu import MoneyBar, StatusMenu
+from ui.menus.shop_menu import ShopMenu
+from ui.menus.settings_menu import SettingMenu
 from data import export_data, import_data
 from map_loader import MapLoader
 
 
 class Level:
     def __init__(self):
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = resource_manager.get_display_surf()
 
         # Sprite groups
         self.all_sprites = pygame.sprite.Group()
@@ -49,62 +51,58 @@ class Level:
         self.status_menu = StatusMenu(self.day_count)
 
         # Shop
-        self.menu = Menu(self.player, self.toggle_shop)
+        self.menu = ShopMenu(self.player, self.toggle_shop)
         self.shop_active = False
 
         # Sound (music)
         self.play_sound = True
-        self.success = load_sound("assets/audio/success.wav")
-        self.success.set_volume(0.3)
-
-        self.music = load_sound("assets/audio/music.mp3")
-        self.music.play(loops=-1)  # inf
+        resource_manager.play_sound("bg_music", -1)
 
         # self.inventory = Inventory(self.player)
 
         # Getting data
-        self.get_saved_game_data()
+        self.load_game_data()
 
     def setup(self):
         self.player = self.map_loader.load_map('assets/maps/map.tmx')
 
-    def get_saved_game_data(self):
+    def load_game_data(self):
         data = import_data()
         if data:
-            self.player.pos = pygame.math.Vector2(data['player']['pos'])
-            self.player.item_inventory = data['player']['inventories']['item inventory']
-            self.player.item_seed = data['player']['inventories']['seed inventory']
-            self.player.selected_tool = data['player']['selected tool']
-            self.player.selected_seed = data['player']['selected seed']
-            self.player.money = data['player']['money']
-            self.day_count = data['day count']
+            self.player.load_data(data["player"])
             self.raining = data['raining']
             self.soil_layer.raining = self.raining
-            self.soil_layer.grid = data['farming data']
-            self.soil_layer.create_hit_rects()
-            self.soil_layer.create_soil_tiles()
-            self.soil_layer.plant_seeds()  # It also loads plant age
-            if self.raining:
-                self.soil_layer.remove_water()
-                self.soil_layer.water_all()
-            self.play_sound = data['settings']['sound']
-            self.setting_menu.sound_switch.play_sound = self.play_sound
-            if self.play_sound:
-                pass
-                # self.music.play(loops=-1)  # inf
+            self.soil_layer.load_data(data['farming data'])
+            self.load_data(data)
+
+    def load_data(self, data: dict):
+        self.day_count = data['day_count']
+        self.play_sound = data['settings']['sound']
+        self.setting_menu.sound_switch.play_sound = self.play_sound
+        if self.play_sound:
+            resource_manager.play_sound("bg_music", -1)
+
+    def save_data(self):
+        return {
+            "player": self.player.save_data(),
+            "raining": self.raining,
+            "day_count": self.day_count,
+            'farming data': self.soil_layer.save_data()
+        }
 
     def save_game_data(self):
         export_data(self)
 
     def player_add(self, item, amount=1):
         self.player.item_inventory[item] += amount
-
-        self.success.play()
+        resource_manager.play_sound("success")
 
     def toggle_shop(self):
         self.shop_active = not self.shop_active
 
     def reset(self):
+        # New day
+
         # Plants
         self.soil_layer.update_plants()
 
@@ -189,7 +187,7 @@ class Level:
             # Sound playing in settings
             if not self.play_sound:
                 # pygame.mixer.pause()
-                self.music.stop()
+                resource_manager.stop_sound("bg_music")
             else:
                 pass
                 # pygame.mixer.unpause()

@@ -2,7 +2,7 @@ from random import choice
 
 import pygame
 
-from settings import LAYERS, GROW_SPEED, TILE_SIZE
+from config import LAYERS, GROW_SPEED, TILE_SIZE
 from utils.load_utils import load_image, load_sound, load_folder_of_images, load_folder_of_images_as_dict, load_map
 
 
@@ -278,3 +278,15 @@ class SoilLayer:
                     # noinspection PyTypeChecker
                     SoilTile((index_col * TILE_SIZE, index_row * TILE_SIZE), self.soil_surfs[tile_type],
                              sorted([self.all_sprites, self.soil_sprites], key=lambda group: len(group.sprites())))
+
+    def load_data(self, data):
+        self.grid = data
+        self.create_hit_rects()
+        self.create_soil_tiles()
+        self.plant_seeds()  # It also loads plant age
+        if self.raining:
+            self.remove_water()
+            self.water_all()
+
+    def save_data(self):
+        return self.grid

@@ -3,7 +3,7 @@ from random import randint, choice
 import pygame
 
 from utils.load_utils import load_image
-from settings import APPLE_POS, LAYERS
+from config import APPLE_POS, LAYERS
 
 
 class Generic(pygame.sprite.Sprite):

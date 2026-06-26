@@ -1,7 +1,7 @@
 import pygame
 
 from entities.player import Player
-from settings import TILE_SIZE, LAYERS
+from config import TILE_SIZE, LAYERS
 from sprites import Interaction, Generic, Tree, Water, WildFlower
 from utils.load_utils import load_map, load_image, load_folder_of_images
 

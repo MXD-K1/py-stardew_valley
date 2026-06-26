@@ -77,8 +77,6 @@ The primary goal of this project is to:
    ```bash
    python main.py
    ```
-   
-OR simply you can run the [EXE file](EXE/Py-stardew%20vally.exe).
 
 ## Resources
 - **YouTube Tutorial**: [Creating a Stardew Valley-inspired game in Python](https://www.youtube.com/watch?v=T4IX36sP_0c)

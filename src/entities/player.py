@@ -1,15 +1,15 @@
 import pygame
 
-from settings import LAYERS, PLAYER_TOOL_OFFSET
-from utils.load_utils import load_sound, load_folder_of_images
+from config import PLAYER_TOOL_OFFSET
+from entities.entity import Entity
+from managers.resource_manager import resource_manager
 from timer import Timer
+from utils.load_utils import load_folder_of_images
+from utils.math_utils import Vector2
 
-
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
     def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
-        print(0)
-        print("group", group)
-        super().__init__(group)
+        super().__init__([group])
 
         self.import_assets()
         self.status = "down_idle"  # default
@@ -18,12 +18,11 @@ class Player(pygame.sprite.Sprite):
         # General setup
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.z = LAYERS['main']  # x, y pos + z
         # self.layer_ the _ to avoid name conflicts
 
         # Movement attributes
-        self.direction = pygame.math.Vector2()  # or Vector2(0, 0)
-        self.pos = pygame.math.Vector2(self.rect.center)
+        self.direction = Vector2()  # or Vector2(0, 0)
+        self.pos = Vector2(self.rect.center)
         self.speed = 200
 
         # Collision
@@ -78,9 +77,6 @@ class Player(pygame.sprite.Sprite):
 
         # Sound
         self.play_sound = True
-        self.watering_sound = load_sound("assets/audio/water.mp3")
-        self.axe_sound = load_sound("assets/audio/axe.mp3")
-        self.watering_sound.set_volume(0.2)
 
     def use_tool(self):
         if self.selected_tool == 'hoe':
@@ -91,14 +87,14 @@ class Player(pygame.sprite.Sprite):
                 if tree.rect.collidepoint(self.target_pos):
                     # Play axe sound
                     if self.play_sound:
-                        self.axe_sound.play()
+                        resource_manager.play_sound("axe")
                     tree.damage()
 
         if self.selected_tool == 'water':
             self.soil_layer.water(self.target_pos)
 
             if self.play_sound:
-                self.watering_sound.play()
+                resource_manager.play_sound("watering")
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split("_")[0]]
@@ -191,10 +187,8 @@ class Player(pygame.sprite.Sprite):
                         self.sleep = True
 
     def get_status(self):
-        # idling
-        # Check if the player is not moving
+        # Check if the player is not moving (idling)
         if self.direction.magnitude() == 0:
-            # Add _idle to the status
             self.status = self.status.split("_")[0] + "_idle"
 
         # Tools
@@ -250,3 +244,27 @@ class Player(pygame.sprite.Sprite):
 
         self.move(dt)
         self.animate(dt)
+
+    def load_data(self, data: dict):
+        self.money = data["money"]
+        self.pos = Vector2(data["pos"])
+        self.direction = Vector2(data["dir"])
+        self.status = data["dir_str"] + "_idle"
+        self.selected_tool = data["selected tool"]
+        self.selected_seed = data["selected seed"]
+        self.item_inventory = data["inventories"]["item inventory"]
+        self.seed_inventory = data["inventories"]["seed inventory"]
+
+    def save_data(self):
+        return {
+            "pos": list(self.pos),
+            "dir": list(self.direction),
+            "dir_str": self.status.split("_")[0],
+            "money": self.money,
+            "inventories": {
+                "item inventory": self.item_inventory,
+                "seed inventory": self.seed_inventory,
+            },
+            "selected tool": self.selected_tool,
+            "selected seed": self.selected_seed
+        }

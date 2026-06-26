@@ -1,22 +1,33 @@
-import sys
-
 import pygame
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT
+from config import SCREEN_WIDTH, SCREEN_HEIGHT
 from level import Level
+from load_resources import load_sounds
+from managers.resource_manager import resource_manager
 from utils import quit_game
+from utils.logging_config import setup_logging, getLogger
 
+logger = None
 
 class Game:
     def __init__(self):
-        pygame.init()
+        self._setup_game()
         self._setup_screen()
-        self.clock = pygame.time.Clock()
         self.level = Level()
+
+    def _setup_game(self):
+        pygame.init()
+        self._load_resources()
+        self.clock = pygame.time.Clock()
+
+    @staticmethod
+    def _load_resources():
+        load_sounds()
 
     def _setup_screen(self):
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Py-Stardew Valley")
+        resource_manager.set_display_surf(self.screen)
 
     def handle_input_events(self):
         for event in pygame.event.get():
@@ -36,11 +47,18 @@ class Game:
 
 
 def run_game():
+    setup_logging()
+    global logger
+    logger = getLogger(__name__)
+
     try:
         game = Game()
         game.run()
     except KeyboardInterrupt:
         quit_game()
+    except Exception as e:
+        logger.exception(e)
+        raise
 
 if __name__ == "__main__":
     run_game()

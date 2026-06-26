@@ -3,6 +3,7 @@ import os
 from pygame import Surface
 from pygame.image import load
 from pygame.mixer import Sound
+from pygame.transform import scale
 from pytmx import TiledMap
 from pytmx.util_pygame import load_pygame
 
@@ -37,4 +38,21 @@ def load_folder_of_images_as_dict(path: str) -> dict:
 
     return images_dict
 
-__all__ = ['load_image', 'load_sound', 'load_map', 'load_folder_of_images', 'load_folder_of_images_as_dict']
+def cut_spritesheet(spritesheet, cols, rows):
+    spritesheet = load_image(spritesheet)
+    frames = {}
+
+    cell_width = spritesheet.get_width() / cols
+    cell_height = spritesheet.get_height() / rows
+
+    for col in range(cols):
+        for row in range(rows):
+            surf = spritesheet.subsurface(
+                (col * cell_width, row * cell_height, cell_width, cell_height)
+            ).copy()
+            surf = scale(surf, (surf.get_width(), surf.get_height())).copy()
+            frames[(row, col)] = surf
+    return frames
+
+__all__ = ['load_image', 'load_sound', 'load_map', 'load_folder_of_images', 'load_folder_of_images_as_dict',
+           'cut_spritesheet']
