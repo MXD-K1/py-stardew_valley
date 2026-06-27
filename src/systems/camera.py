@@ -1,8 +1,9 @@
 import pygame
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS, PLAYER_TOOL_OFFSET
+from data.constants import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS, PLAYER_TOOL_OFFSET
 from managers.resource_manager import resource_manager
 from utils.math_utils import Vector2
+
 
 class Camera:
     def __init__(self, group: pygame.sprite.Group):
@@ -18,7 +19,9 @@ class Camera:
 
         for layer in LAYERS.values():
             # print(layer)
-            for sprite in sorted(self.group.sprites(), key=lambda sprite_: sprite_.rect.centery):  # sorted for overlap
+            for sprite in sorted(
+                self.group.sprites(), key=lambda sprite_: sprite_.rect.centery
+            ):  # sorted for overlap
                 if sprite.z == layer:  # to make the correct order
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
@@ -28,9 +31,11 @@ class Camera:
     def test_target_pos(self, sprite, player, offset_rect):
         """Not used in the project. Only for testing."""
         if sprite == player:
-            pygame.draw.rect(self.display_surface, 'red', offset_rect, 5)
+            pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
             hitbox_rect = player.hitbox.copy()
             hitbox_rect.center = offset_rect.center
-            pygame.draw.rect(self.display_surface, 'green', hitbox_rect, 5)
-            target_pos = offset_rect.center + PLAYER_TOOL_OFFSET[player.status.split("_")[0]]
-            pygame.draw.circle(self.display_surface, 'blue', target_pos, 5)
+            pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
+            target_pos = (
+                offset_rect.center + PLAYER_TOOL_OFFSET[player.status.split("_")[0]]
+            )
+            pygame.draw.circle(self.display_surface, "blue", target_pos, 5)

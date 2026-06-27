@@ -1,8 +1,9 @@
 from random import randint
+from typing import Any
 
 import pygame
 
-from config import TILE_SIZE, LAYERS
+from data.constants import TILE_SIZE, LAYERS
 from managers.resource_manager import resource_manager
 from systems.camera import Camera
 from ui.overlay import Overlay
@@ -13,12 +14,12 @@ from sky import Rain, Sky
 from ui.menus.status_menu import MoneyBar, StatusMenu
 from ui.menus.shop_menu import ShopMenu
 from ui.menus.settings_menu import SettingMenu
-from data import export_data, import_data
+from data_handling import export_data, import_data
 from map_loader import MapLoader
 
 
 class Level:
-    def __init__(self):
+    def __init__(self) -> None:
         self.display_surface = resource_manager.get_display_surf()
 
         # Sprite groups
@@ -31,9 +32,16 @@ class Level:
 
         self.soil_layer = SoilLayer(self.all_sprites, self.collision_sprites)
 
-        self.map_loader = MapLoader(self.all_sprites, self.collision_sprites, self.tree_sprites,
-                                    self.interaction_sprites, self.player_add, self.soil_layer, self.toggle_shop)
-        self.setup()
+        self.map_loader = MapLoader(
+            self.all_sprites,
+            self.collision_sprites,
+            self.tree_sprites,
+            self.interaction_sprites,
+            self.player_add,
+            self.soil_layer,
+            self.toggle_shop,
+        )
+        self._setup()
 
         self.overlay = Overlay(self.player)
         self.transition = Transition(self.reset, self.player)
@@ -63,44 +71,44 @@ class Level:
         # Getting data
         self.load_game_data()
 
-    def setup(self):
-        self.player = self.map_loader.load_map('assets/maps/map.tmx')
+    def _setup(self) -> None:
+        self.player = self.map_loader.load_map("assets/maps/map.tmx")
 
-    def load_game_data(self):
+    def load_game_data(self) -> None:
         data = import_data()
         if data:
             self.player.load_data(data["player"])
-            self.raining = data['raining']
+            self.raining = data["raining"]
             self.soil_layer.raining = self.raining
-            self.soil_layer.load_data(data['farming data'])
+            self.soil_layer.load_data(data["farming data"])
             self.load_data(data)
 
-    def load_data(self, data: dict):
-        self.day_count = data['day_count']
-        self.play_sound = data['settings']['sound']
+    def load_data(self, data: dict) -> None:
+        self.day_count = data["day_count"]
+        self.play_sound = data["settings"]["sound"]
         self.setting_menu.sound_switch.play_sound = self.play_sound
         if self.play_sound:
             resource_manager.play_sound("bg_music", -1)
 
-    def save_data(self):
+    def save_data(self) -> dict[str, Any]:
         return {
             "player": self.player.save_data(),
             "raining": self.raining,
             "day_count": self.day_count,
-            'farming data': self.soil_layer.save_data()
+            "farming data": self.soil_layer.save_data(),
         }
 
-    def save_game_data(self):
+    def save_game_data(self) -> None:
         export_data(self)
 
-    def player_add(self, item, amount=1):
+    def player_add(self, item, amount: int = 1) -> None:
         self.player.item_inventory[item] += amount
         resource_manager.play_sound("success")
 
-    def toggle_shop(self):
+    def toggle_shop(self) -> None:
         self.shop_active = not self.shop_active
 
-    def reset(self):
+    def reset(self) -> None:
         # New day
 
         # Plants
@@ -131,27 +139,41 @@ class Level:
         # Saving data
         export_data(self)  # When sleeping
 
-    def plant_collision(self):
+    def plant_collision(self) -> None:
         if self.soil_layer.plant_sprites:
             for plant in self.soil_layer.plant_sprites.sprites():
                 if plant.harvestable and plant.rect.colliderect(self.player.hitbox):
                     self.player_add(plant.plant_type)
                     plant.kill()
                     # noinspection PyTypeChecker
-                    Particle(plant.rect.topleft, plant.image, self.all_sprites, z=LAYERS['main'])
+                    Particle(
+                        plant.rect.topleft,
+                        plant.image,
+                        self.all_sprites,
+                        z=LAYERS["main"],
+                    )
 
-                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE]
-                        ["Planting info"]["Planted"]) = False
-                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE]
-                        ["Planting info"]["Seed"]) = None
-                    (self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE]
-                        ["Planting info"]["Age"]) = 0
+                    (
+                        self.soil_layer.grid[plant.rect.centery // TILE_SIZE][
+                            plant.rect.centerx // TILE_SIZE
+                        ]["Planting info"]["Planted"]
+                    ) = False
+                    (
+                        self.soil_layer.grid[plant.rect.centery // TILE_SIZE][
+                            plant.rect.centerx // TILE_SIZE
+                        ]["Planting info"]["Seed"]
+                    ) = None
+                    (
+                        self.soil_layer.grid[plant.rect.centery // TILE_SIZE][
+                            plant.rect.centerx // TILE_SIZE
+                        ]["Planting info"]["Age"]
+                    ) = 0
 
-    def get_current_settings(self):
+    def get_current_settings(self) -> None:
         self.play_sound = self.setting_menu.sound_switch.play_sound
         self.settings = {"play sound": self.play_sound}
 
-    def run(self, dt):
+    def run(self, dt: float) -> None:
         # Drawing logic
         self.camera.custom_draw(self.player)
 

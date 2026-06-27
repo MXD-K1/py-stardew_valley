@@ -5,10 +5,10 @@ from utils.file_utils import write_json, read_json
 
 def export_data(level) -> None:
     data = {
-        'time': None,  # Empty for now
-        'Trees data': None,  # Empty for now
-        'settings': {
-            'sound': level.play_sound,
+        "time": None,  # Empty for now
+        "Trees data": None,  # Empty for now
+        "settings": {
+            "sound": level.play_sound,
         },
     } | level.save_data()
 

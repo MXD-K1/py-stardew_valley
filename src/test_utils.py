@@ -8,4 +8,5 @@ def time(func: Callable):
         func(*args, **kwargs)
         elapsed_time = perf_counter() - start
         print(elapsed_time)
+
     return wrapper

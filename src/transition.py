@@ -1,10 +1,13 @@
 import pygame
-from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from typing import Callable
+
+from data.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from objects.entities.player import Player
 from managers.resource_manager import resource_manager
 
 
 class Transition:
-    def __init__(self, reset, player):
+    def __init__(self, reset: Callable, player: Player) -> None:
         # Setup
         self.display_surface = resource_manager.get_display_surf()
         self.reset = reset
@@ -15,7 +18,7 @@ class Transition:
         self.color = 255  # white
         self.speed = -2
 
-    def play(self):
+    def play(self) -> None:
         self.color += self.speed  # will turn to black
         if self.color <= 0:
             self.speed *= -1
@@ -27,5 +30,7 @@ class Transition:
             self.speed *= -1
 
         self.image.fill((self.color, self.color, self.color))
-        self.display_surface.blit(self.image, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        self.display_surface.blit(
+            self.image, (0, 0), special_flags=pygame.BLEND_RGBA_MULT
+        )
         # pygame.BLEND_RGBA_MULT gets rid of white

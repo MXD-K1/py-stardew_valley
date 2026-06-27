@@ -1,6 +1,6 @@
 import pygame
 
-from config import SCREEN_WIDTH
+from data.constants import SCREEN_WIDTH
 from managers.resource_manager import resource_manager
 from timer import Timer
 from utils.load_utils import load_image
@@ -9,12 +9,12 @@ from utils.assets_utils import scale_image
 
 class Switch:
     def __init__(self):
-        self.switch_on_ico = scale_image(load_image(
-            "assets/graphics/buttons and surfaces/switch on.png"),
-            (50, 30))
-        self.switch_off_ico = scale_image(load_image(
-            "assets/graphics/buttons and surfaces/switch off.png"),
-            (50, 30))
+        self.switch_on_ico = scale_image(
+            load_image("assets/graphics/buttons and surfaces/switch on.png"), (50, 30)
+        )
+        self.switch_off_ico = scale_image(
+            load_image("assets/graphics/buttons and surfaces/switch off.png"), (50, 30)
+        )
 
         self.timer = Timer(200, self.toggle)
         self.play_sound = False
@@ -36,10 +36,17 @@ class Switch:
 class SettingMenu:
     def __init__(self):
         self.display_surface = resource_manager.get_display_surf()
-        self.base = scale_image(load_image("assets/graphics/buttons and surfaces/sq_button.png"), (50, 50))
+        self.base = scale_image(
+            load_image("assets/graphics/buttons and surfaces/sq_button.png"), (50, 50)
+        )
         self.font = pygame.font.Font("assets/fonts/LycheeSoda.ttf", 32)
-        self.setting_ico = scale_image(load_image("assets/graphics/icons/settings.png"), (25, 25))
-        self.setting_pad = scale_image(load_image("assets/graphics/buttons and surfaces/setting pad.png"), (300, 400))
+        self.setting_ico = scale_image(
+            load_image("assets/graphics/icons/settings.png"), (25, 25)
+        )
+        self.setting_pad = scale_image(
+            load_image("assets/graphics/buttons and surfaces/setting pad.png"),
+            (300, 400),
+        )
         self.space = 25
 
         self.pos = (SCREEN_WIDTH - self.setting_pad.get_width() - 100, 90)
@@ -85,12 +92,21 @@ class SettingMenu:
         self.display_surface.blit(self.sound_ico, (self.pos[0] + 20, self.pos[1] + 110))
 
         for index, item in enumerate(self.items):
-            item.get_surf(settings['play sound'])
-            rect = pygame.Rect(self.pos[0] + self.setting_pad.get_width() - 60,
-                               self.pos[1] + 120 + (self.space * index), 50, 30)
+            item.get_surf(settings["play sound"])
+            rect = pygame.Rect(
+                self.pos[0] + self.setting_pad.get_width() - 60,
+                self.pos[1] + 120 + (self.space * index),
+                50,
+                30,
+            )
             item.check_pressed(rect)
-            self.display_surface.blit(item.surf, (self.pos[0] + self.setting_pad.get_width() - 60,
-                                                  self.pos[1] + 120 + (self.space * index)))
+            self.display_surface.blit(
+                item.surf,
+                (
+                    self.pos[0] + self.setting_pad.get_width() - 60,
+                    self.pos[1] + 120 + (self.space * index),
+                ),
+            )
 
     def add_item(self, item):
         """Add a setting to settings."""

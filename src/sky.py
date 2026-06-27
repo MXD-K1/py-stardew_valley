@@ -4,29 +4,32 @@ import pygame
 
 from managers.resource_manager import resource_manager
 from utils.load_utils import load_image, load_folder_of_images
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS
+from utils.math_utils import Vector2
+from data.constants import SCREEN_WIDTH, SCREEN_HEIGHT, LAYERS
 from sprites import Generic
 
 
 class Sky:
-    def __init__(self):
+    def __init__(self) -> None:
         self.display_surface = resource_manager.get_display_surf()
         self.full_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.start_color = [255, 255, 255]  # not a tuple because it will change
         self.end_color = (100, 100, 189)  # In progress
 
-    def display(self, dt):
+    def display(self, dt: float) -> None:
         for index, value in enumerate(self.end_color):
             # print(self.start_color)
             if self.start_color[index] > value:
                 self.start_color[index] -= 2 * dt
 
         self.full_surf.fill(self.start_color)
-        self.display_surface.blit(self.full_surf, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        self.display_surface.blit(
+            self.full_surf, (0, 0), special_flags=pygame.BLEND_RGBA_MULT
+        )
 
 
 class Drop(Generic):
-    def __init__(self, pos, surf, moving, groups, z):
+    def __init__(self, pos: Vector2 | tuple[int, int], surf: pygame.Surface, moving, groups, z):
         # General setup
         super().__init__(pos, surf, groups, z)
         self.lifetime = randint(400, 500)
@@ -39,11 +42,11 @@ class Drop(Generic):
             self.direction = pygame.math.Vector2(-2, 4)
             self.speed = randint(200, 250)
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         # Movement
         if self.moving:
             self.pos += self.direction * self.speed * dt
-            self.rect.topleft = (round(self.pos.x),  round(self.pos.y))
+            self.rect.topleft = (round(self.pos.x), round(self.pos.y))
 
         current_time = pygame.time.get_ticks()
         # Timer
@@ -56,26 +59,28 @@ class Rain:
         self.all_sprites = all_sprites
         self.rain_drops = load_folder_of_images("assets/graphics/rain/drops/")
         self.rain_floor = load_folder_of_images("assets/graphics/rain/floor/")
-        self.floor_w, self.floor_h = load_image("assets/graphics/world/ground.png").get_size()
+        self.floor_w, self.floor_h = load_image(
+            "assets/graphics/world/ground.png"
+        ).get_size()
 
-    def create_floor(self):
+    def create_floor(self) -> None:
         Drop(
             pos=(randint(0, self.floor_w), randint(0, self.floor_h)),
             surf=choice(self.rain_floor),
             moving=False,
             groups=self.all_sprites,
-            z=LAYERS['rain floor']
+            z=LAYERS["rain floor"],
         )
 
-    def create_drops(self):
+    def create_drops(self) -> None:
         Drop(
             pos=(randint(0, self.floor_w), randint(0, self.floor_h)),
             surf=choice(self.rain_drops),
             moving=True,
             groups=self.all_sprites,
-            z=LAYERS['rain drops']
+            z=LAYERS["rain drops"],
         )
 
-    def update(self):
+    def update(self) -> None:
         self.create_floor()
         self.create_drops()

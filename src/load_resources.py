@@ -7,7 +7,7 @@ from utils.logging_config import getLogger
 logger = getLogger(__name__)
 
 
-def load_sounds():
+def load_sounds() -> None:
     try:
         sound_1 = load_sound("assets/audio/success.wav")
         sound_1.set_volume(0.3)
@@ -24,4 +24,4 @@ def load_sounds():
         resource_manager.add_sound("watering", sound_3)
         resource_manager.add_sound("axe", sound_4)
 
-        logger.info(f"Sounds loaded successfully")
+        logger.info("Sounds loaded successfully")

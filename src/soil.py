@@ -2,8 +2,14 @@ from random import choice
 
 import pygame
 
-from config import LAYERS, GROW_SPEED, TILE_SIZE
-from utils.load_utils import load_image, load_sound, load_folder_of_images, load_folder_of_images_as_dict, load_map
+from data.constants import LAYERS, GROW_SPEED, TILE_SIZE
+from utils.load_utils import (
+    load_image,
+    load_sound,
+    load_folder_of_images,
+    load_folder_of_images_as_dict,
+    load_map,
+)
 
 
 class SoilTile(pygame.sprite.Sprite):
@@ -12,7 +18,7 @@ class SoilTile(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_rect(topleft=pos)
-        self.z = LAYERS['soil']
+        self.z = LAYERS["soil"]
 
 
 class WaterTile(pygame.sprite.Sprite):
@@ -21,7 +27,7 @@ class WaterTile(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_rect(topleft=pos)
-        self.z = LAYERS['soil water']
+        self.z = LAYERS["soil water"]
 
 
 class Plant(pygame.sprite.Sprite):
@@ -31,7 +37,7 @@ class Plant(pygame.sprite.Sprite):
 
         # Setup
         self.plant_type = plant_type
-        self.frames = load_folder_of_images(f'assets/graphics/fruit/{plant_type}')
+        self.frames = load_folder_of_images(f"assets/graphics/fruit/{plant_type}")
         self.soil = soil
         self.check_watered = check_watered
 
@@ -43,13 +49,17 @@ class Plant(pygame.sprite.Sprite):
 
         # Sprite setup
         self.image = self.frames[self.age]
-        self.y_offset = -16 if plant_type == 'corn' else -8  # they are different in size
-        self.rect = self.image.get_rect(midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
-        self.z = LAYERS['ground plant']
+        self.y_offset = (
+            -16 if plant_type == "corn" else -8
+        )  # they are different in size
+        self.rect = self.image.get_rect(
+            midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset)
+        )
+        self.z = LAYERS["ground plant"]
 
     def display(self):
         if int(self.age) > 0:
-            self.z = LAYERS['main']
+            self.z = LAYERS["main"]
             self.hitbox = self.rect.copy().inflate(-26, -self.rect.height * 0.4)
 
         if self.age >= self.max_age:
@@ -57,7 +67,9 @@ class Plant(pygame.sprite.Sprite):
             self.harvestable = True
 
         self.image = self.frames[int(self.age)]
-        self.rect = self.image.get_rect(midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
+        self.rect = self.image.get_rect(
+            midbottom=self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset)
+        )
 
     def grow(self):
         if self.check_watered(self.rect.center):
@@ -91,15 +103,29 @@ class SoilLayer:
 
     # Requirements
     def create_soil_grid(self):
-        ground = load_image("assets/graphics/world/ground.png")  # Not shown to the player
-        h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
+        ground = load_image(
+            "assets/graphics/world/ground.png"
+        )  # Not shown to the player
+        h_tiles, v_tiles = (
+            ground.get_width() // TILE_SIZE,
+            ground.get_height() // TILE_SIZE,
+        )
 
-        self.grid = [[{"Soil info": {"Farmable": False, "Hit": False, "Watered": False},
-                       "Planting info": {"Planted": False, "Seed": None, "Age": 0}}
-                      for _ in range(h_tiles)] for _ in range(v_tiles)]
+        self.grid = [
+            [
+                {
+                    "Soil info": {"Farmable": False, "Hit": False, "Watered": False},
+                    "Planting info": {"Planted": False, "Seed": None, "Age": 0},
+                }
+                for _ in range(h_tiles)
+            ]
+            for _ in range(v_tiles)
+        ]
         # surf is not important, y row, x col, [[[] for col in range(h_tiles)] for row in range(v_tiles)]
         # noinspection PyUnresolvedReferences
-        for x, y, _ in load_map("assets/maps/map.tmx").get_layer_by_name('Farmable').tiles():
+        for x, y, _ in (
+            load_map("assets/maps/map.tmx").get_layer_by_name("Farmable").tiles()
+        ):
             # noinspection PyTypeChecker
             self.grid[y][x]["Soil info"]["Farmable"] = True
 
@@ -107,7 +133,7 @@ class SoilLayer:
         self.hit_rects = []
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
-                if cell['Soil info']['Farmable']:
+                if cell["Soil info"]["Farmable"]:
                     x = index_col * TILE_SIZE
                     y = index_row * TILE_SIZE
                     rect = pygame.Rect((x, y), (TILE_SIZE, TILE_SIZE))
@@ -188,8 +214,12 @@ class SoilLayer:
                     self.grid[y][x]["Planting info"]["Planted"] = True
                     self.grid[y][x]["Planting info"]["Seed"] = seed
                     # noinspection PyTypeChecker
-                    Plant(seed, [self.all_sprites, self.plant_sprites, self.collision_sprites], soil_sprite,
-                          self.check_watered)
+                    Plant(
+                        seed,
+                        [self.all_sprites, self.plant_sprites, self.collision_sprites],
+                        soil_sprite,
+                        self.check_watered,
+                    )
                     self.planted = True
                     return
         self.planted = False
@@ -204,9 +234,12 @@ class SoilLayer:
 
             if cell["Planting info"]["Planted"]:
                 # noinspection PyTypeChecker
-                plant = Plant(cell["Planting info"]["Seed"],
-                              [self.all_sprites, self.plant_sprites, self.collision_sprites],
-                              soil_sprite, self.check_watered)
+                plant = Plant(
+                    cell["Planting info"]["Seed"],
+                    [self.all_sprites, self.plant_sprites, self.collision_sprites],
+                    soil_sprite,
+                    self.check_watered,
+                )
                 plant.age = cell["Planting info"]["Age"]
                 plant.display()
 
@@ -276,8 +309,14 @@ class SoilLayer:
                     # Add more logic
 
                     # noinspection PyTypeChecker
-                    SoilTile((index_col * TILE_SIZE, index_row * TILE_SIZE), self.soil_surfs[tile_type],
-                             sorted([self.all_sprites, self.soil_sprites], key=lambda group: len(group.sprites())))
+                    SoilTile(
+                        (index_col * TILE_SIZE, index_row * TILE_SIZE),
+                        self.soil_surfs[tile_type],
+                        sorted(
+                            [self.all_sprites, self.soil_sprites],
+                            key=lambda group: len(group.sprites()),
+                        ),
+                    )
 
     def load_data(self, data):
         self.grid = data

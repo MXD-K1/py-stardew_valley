@@ -1,15 +1,17 @@
+from typing import Self
+
 import pygame
 
 
 class ResourceManager:
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs) -> Self:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__display_surf: pygame.Surface | None = None
 
         self.__surfs: dict[str, pygame.Surface] = {}
@@ -40,5 +42,6 @@ class ResourceManager:
 
     def get_surf(self, name: str) -> pygame.Surface:
         return self.__surfs[name]
+
 
 resource_manager = ResourceManager()
